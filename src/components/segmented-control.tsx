@@ -19,7 +19,7 @@ export function SegmentedControl<T extends string>({
   return (
     <fieldset className="min-w-0">
       <legend className="mb-2 text-sm font-medium text-secondary">{label}</legend>
-      <div className="flex flex-wrap gap-1 rounded-full bg-soft p-1">
+      <div className="flex min-w-0 flex-wrap gap-1 rounded-full bg-soft p-1">
         {options.map((option) => {
           const selected = option.value === value;
 
@@ -30,7 +30,7 @@ export function SegmentedControl<T extends string>({
               aria-pressed={selected}
               onClick={() => onChange?.(option.value)}
               className={[
-                "min-h-10 rounded-full px-4 text-sm font-medium transition",
+                "min-h-10 min-w-0 rounded-full px-4 text-sm font-medium transition",
                 selected
                   ? "bg-ink text-[#f8f7f2] shadow-sm"
                   : "text-secondary hover:bg-card hover:text-primary",

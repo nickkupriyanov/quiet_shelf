@@ -88,6 +88,17 @@ textarea {
   font: inherit;
 }
 
+.form-input {
+  min-height: 2.75rem;
+  min-width: 0;
+  width: 100%;
+  border-radius: 999px;
+  border: 1px solid var(--border-soft);
+  background: var(--surface-shell);
+  padding: 0 1rem;
+  color: var(--text-primary);
+}
+
 button:focus-visible,
 a:focus-visible,
 input:focus-visible,
