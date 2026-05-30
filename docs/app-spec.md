@@ -1,12 +1,14 @@
-# Bookshelf App Spec
+# QuietShelf App Spec
 
 ## Summary
 
-Bookshelf MVP is a private web app for tracking personal reading momentum. It starts local-first without accounts, sync, friends, clubs, public profiles, recommendations, or achievements.
+QuietShelf MVP is a private web app for tracking personal reading momentum. It starts local-first without accounts, sync, friends, clubs, public profiles, recommendations, or achievements.
 
 The product centers on one daily job: help the user quickly see what they are reading, update progress, and keep a useful personal library.
 
 The MVP should preserve the signals needed for future social features: ratings, tags, reading cadence, finished dates, and status history.
+
+Visible product copy must be in Russian. The brand name stays `QuietShelf`. TypeScript types, route names, enum values, repository interfaces, and internal API names stay in English.
 
 ## Core Product
 
@@ -18,9 +20,10 @@ Required behavior:
 
 - Show the active book as the primary object.
 - Show cover, title, author, current page, total pages, and progress.
-- Provide quick actions: `+10 pages` and `Update`.
+- Provide quick actions: `+10 страниц` and `Обновить`.
 - Show weekly reading summary, current streak, and a small continue shelf.
-- If no books exist, show an empty shelf state with a primary `Add book` action.
+- Show a right-side insight widget with four manual tabs: `Сегодня`, `Неделя`, `История`, and `Финиш`.
+- If no books exist, show an empty shelf state with a primary `Добавить книгу` action.
 
 ### Library
 
@@ -33,7 +36,7 @@ Required behavior:
 - Sort by recently updated, title, author, and progress.
 - Show progress for reading books.
 - Show rating and tags for finished or tagged books.
-- Handle empty filtered results with `Clear filters` and `Add book` actions.
+- Handle empty filtered results with `Сбросить фильтры` and `Добавить книгу` actions.
 
 ### Add/Edit Book
 
@@ -59,6 +62,20 @@ Required behavior:
 - Allow editing status, rating, and tags.
 - Suggest marking the book finished when current page reaches total pages.
 - Do not require rating or tags to finish a book.
+
+### Home Insight Widget
+
+Purpose: keep the right side useful without adding social features or dead placeholders.
+
+Required behavior:
+
+- Use manual tabs, not auto-rotating carousel behavior.
+- Default tab is `Сегодня`.
+- `Сегодня` prompts the user to update the active book and repeats the safest quick actions.
+- `Неделя` shows pages read, current streak, and finished count.
+- `История` summarizes recent progress entries and status changes.
+- `Финиш` shows remaining pages for unfinished books, or rating, tags, finish date, and status history for finished books.
+- The widget keeps a stable size across tabs on desktop and appears after the profile summary on mobile.
 
 ## Data And Interfaces
 
@@ -95,6 +112,14 @@ Required behavior:
 - `deltaPages`
 - `createdAt`
 
+`StatusHistoryEntry`:
+
+- `id`
+- `bookId`
+- `fromStatus`
+- `toStatus`
+- `createdAt`
+
 `BookRepository`:
 
 - Create a book.
@@ -104,6 +129,7 @@ Required behavior:
 - List books.
 - Search, filter, and sort books.
 - Add and list progress entries.
+- Add and list status history entries.
 
 ### Rules
 
@@ -113,8 +139,10 @@ Required behavior:
 - `rating` is optional and must be `1-5` when present.
 - Tags are optional short freeform labels.
 - Progress updates should create history entries.
+- Status changes should create status history entries.
 - Reaching `totalPages` should suggest finishing the book.
 - External metadata search is helper behavior only. Manual entry must always work.
+- MVP metadata search is stub-only. `searchBookMetadata` returns an empty result when no provider is configured, and the UI keeps manual entry usable.
 
 ## Architecture
 
@@ -195,6 +223,7 @@ Unit tests:
 - Finish suggestion.
 - Status transitions.
 - Rating and tag validation.
+- Status history entry creation.
 
 Repository tests:
 
@@ -203,12 +232,13 @@ Repository tests:
 - Filter by status.
 - Sort by updated date, title, author, and progress.
 - Persist and retrieve progress history.
+- Persist and retrieve status history.
 - Survive page reload with local data intact.
 
 UI/e2e scenarios:
 
-- Add a book manually.
-- Update progress from the home dashboard.
+- Add a book manually using Russian form labels.
+- Update progress from the home dashboard using Russian actions.
 - Filter the library.
 - Open book detail.
 - Finish a book.
@@ -222,3 +252,4 @@ UI/e2e scenarios:
 - UI follows `docs/ui-spec.md`.
 - Project-wide agent guidance lives in `AGENTS.md`.
 - Future backend direction is `Next API + Postgres`, not Supabase by default.
+- Production tests should use Russian accessible names and labels for visible UI.

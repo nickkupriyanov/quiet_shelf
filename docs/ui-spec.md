@@ -1,24 +1,36 @@
-# Bookshelf UI Spec
+# QuietShelf UI Spec
 
 ## Design Read
 
-Bookshelf is a personal reading tracker for readers who want a warm, calm way to keep momentum. The first version is a private product UI, not a marketing site. It should feel like a personal reading room with enough structure to become social later.
+QuietShelf is a personal reading tracker for readers who want a calm, polished way to keep momentum. The first version is a private product UI, not a marketing site. It should feel like a soft, modern reading dashboard with enough structure to become social later.
 
 Design dials:
 
-- `DESIGN_VARIANCE`: 5
+- `DESIGN_VARIANCE`: 6
 - `MOTION_INTENSITY`: 3
-- `VISUAL_DENSITY`: 5
+- `VISUAL_DENSITY`: 6
 
-The interface should be distinctive through material, book covers, progress rhythm, and typography. It should not rely on decorative flourishes, heavy animation, generic dashboard cards, or a beige craft-brand cliche.
+The interface should be distinctive through a clean app-frame, soft modular cards, book covers, progress rhythm, and typography. It should not rely on heavy shadows, muddy green surfaces, decorative flourishes, generic dashboard cards, or a beige craft-brand cliche.
+
+Visible UI copy is Russian. The brand name remains `QuietShelf`. Technical identifiers such as routes, TypeScript types, enum values, repository methods, and internal API names remain English.
 
 ## Visual Direction
 
-Use `Object-led dashboard` as the main design principle. The active book is the visual anchor of the home screen: cover first, reading progress second, controls third.
+Use `Soft product dashboard` as the main design principle. The app sits in a light rounded shell with a compact top navigation, a calm dashboard grid, and pastel module backgrounds. The active book remains the visual anchor of the home screen: cover first, reading progress second, controls third.
 
-Borrow from `Shelf system` for the library: books should feel arranged, browsable, and tactile. The shelf metaphor should be subtle and structural, not literal decoration everywhere.
+Borrow from `Shelf system` for the library: books should feel arranged, browsable, and tactile. The shelf metaphor should be subtle and structural, expressed through cover proportions, grouped cards, and rhythm rather than wood tones or literal shelves.
 
 Borrow lightly from `Signature progress`: progress should have a recognizable shape across the app, using sage-green fills, small weekly reading bars, and streak metrics. Avoid making the product feel like a fitness app.
+
+Reference direction:
+
+- Light milk-white app container over a soft lilac and graphite page background.
+- Compact top navigation with pill active state, not a heavy left rail by default.
+- Rounded dashboard modules with clean internal spacing.
+- Pastel supporting cards: mint, lilac, peach, rose, and restrained gold.
+- Dark graphite primary actions. Sage is used for progress and reading-state confirmation.
+- Avoid a swampy olive-dominant interface.
+- Use the full browser width for the dashboard shell. The content should feel expansive and balanced, not like a narrow centered card.
 
 ## Design Tokens
 
@@ -28,40 +40,50 @@ Use semantic tokens rather than raw colors in components.
 
 Light mode:
 
-- `surface.base`: `#f3efe5`
-- `surface.raised`: `#fffaf2`
-- `surface.muted`: `#e9e1d1`
-- `surface.shelf`: `#d8c7aa`
-- `text.primary`: `#243025`
-- `text.secondary`: `#6b6256`
-- `text.muted`: `#8a8174`
-- `border.soft`: `#d7cec0`
-- `accent.primary`: `#536f48`
-- `accent.primaryDark`: `#34452f`
-- `accent.secondary`: `#8b3f47`
-- `accent.gold`: `#c9a968`
+- `surface.page`: `#f2f1fb`
+- `surface.shell`: `#f8f7f2`
+- `surface.card`: `#fffefa`
+- `surface.soft`: `#f2efe8`
+- `text.primary`: `#1d2730`
+- `text.secondary`: `#65707a`
+- `text.muted`: `#8b96a1`
+- `border.soft`: `#e7e2da`
+- `accent.ink`: `#243241`
+- `accent.sage`: `#7d9b77`
+- `accent.mint`: `#dff3db`
+- `accent.lilac`: `#ede5ff`
+- `accent.lavender`: `#c9b8ff`
+- `accent.peach`: `#ffe3c5`
+- `accent.rose`: `#f2c8ca`
+- `accent.gold`: `#f0c66e`
 
 Dark mode:
 
-- `surface.base`: `#171b16`
-- `surface.raised`: `#22271f`
-- `surface.muted`: `#2d3429`
-- `surface.shelf`: `#4b3d2f`
-- `text.primary`: `#f2eadc`
-- `text.secondary`: `#c9bead`
-- `text.muted`: `#948878`
-- `border.soft`: `#3c4437`
-- `accent.primary`: `#9bab7b`
-- `accent.primaryDark`: `#c5d0a1`
-- `accent.secondary`: `#c9828b`
-- `accent.gold`: `#d4b66d`
+- `surface.page`: `#171b22`
+- `surface.shell`: `#22262d`
+- `surface.card`: `#2b3038`
+- `surface.soft`: `#313742`
+- `text.primary`: `#f4f1ea`
+- `text.secondary`: `#c7c2b8`
+- `text.muted`: `#969da5`
+- `border.soft`: `#3c434c`
+- `accent.ink`: `#f4f1ea`
+- `accent.sage`: `#9ab28f`
+- `accent.mint`: `#314438`
+- `accent.lilac`: `#38324d`
+- `accent.lavender`: `#9d8ad7`
+- `accent.peach`: `#4d3a2c`
+- `accent.rose`: `#50363b`
+- `accent.gold`: `#d8b969`
 
 Rules:
 
-- Green is the main action and progress color.
-- Burgundy is reserved for rare taste, tag, or rating accents.
-- Gold is used sparingly for finished books or achievement-like moments.
-- Do not introduce blue, purple, neon, or multiple competing accent colors.
+- Dark graphite is the main action color.
+- Sage is the main progress and reading-state color.
+- Lilac, mint, peach, and rose are supporting module tints, not competing CTA colors.
+- Gold is used sparingly for finished books or special completion moments.
+- Do not use muddy olive as the dominant surface color.
+- Do not introduce neon or saturated blue/purple glows.
 
 ### Typography
 
@@ -89,22 +111,23 @@ Rules:
 
 Radius system:
 
-- App panels and book detail containers: `16px`
-- Cards and inputs: `12px`
+- App shell: `20px`
+- App panels and book detail containers: `18-20px`
+- Cards and inputs: `12-14px`
 - Book covers: `6-8px`
 - Buttons and segmented controls: full pill
 
 Spacing:
 
-- App shell padding desktop: `32px`
+- App shell padding desktop: `16px` inside the rounded app-frame
 - App shell padding tablet: `24px`
 - App shell padding mobile: `16px`
-- Component gap: `12-16px`
-- Section gap: `28-40px`
+- Component gap: `10-14px`
+- Section gap: `14-18px` inside dashboard grids
 
 Elevation:
 
-- Use soft, warm shadows only for covers and raised panels.
+- Use soft, cool-neutral shadows only for covers and raised panels.
 - Use borders and spacing before shadows for hierarchy.
 - Cover shadows may be stronger than UI panel shadows because covers are physical objects.
 
@@ -114,21 +137,23 @@ Elevation:
 
 Desktop layout:
 
-- Left sidebar or compact top-left rail with app name, primary nav, and add-book action.
-- Main content max width around `1180-1280px`.
-- Home dashboard uses a two-column composition: active book module on the left, weekly/streak modules on the right.
+- Rounded app-frame fills the available browser width with compact top navigation, app name, primary nav, and utility actions.
+- Main content uses `100%` width with responsive horizontal padding. Cap individual text blocks rather than the whole dashboard.
+- Home dashboard uses a two-column structure on desktop: the left column contains reading cadence, active book, and shelf; the right column contains profile, actions, and the insight widget.
+- A left rail is allowed only if the final implementation needs denser navigation later. It is not the default MVP direction.
 
 Mobile layout:
 
 - Top app bar with app name and add action.
-- Bottom navigation with Home, Library, and Profile/Stats placeholder.
-- Home stacks active book first, then quick actions, then weekly metrics.
+- Bottom navigation with `Главная`, `Библиотека`, and `Добавить`.
+- Home stacks header, reading cadence, active book, profile summary, insight widget, and shelf.
+- The active book and `+10 страниц` action must remain visible before the user reaches the shelf.
 
 Primary nav:
 
-- Home
-- Library
-- Add
+- `Главная`
+- `Библиотека`
+- `Добавить`
 
 Future nav slots:
 
@@ -146,17 +171,20 @@ Required modules:
 
 - Active book hero
 - Quick progress actions
+- Reading cadence strip with the current seven-day range
 - Weekly reading summary
 - Current streak
 - Continue shelf with other active books
+- Reader summary with local reading stats
+- Insight widget with `Сегодня`, `Неделя`, `История`, and `Финиш` tabs
 
 Active book hero:
 
 - Large book cover on the left or top.
 - Title, author, current page, total pages, and progress percent.
-- Primary action: `+10 pages`
-- Secondary action: `Update`
-- Tertiary action inside detail flow: `Finish book`
+- Primary action: `+10 страниц`
+- Secondary action: `Обновить`
+- Tertiary action inside detail flow: `Завершить книгу`
 
 Progress presentation:
 
@@ -165,10 +193,21 @@ Progress presentation:
 - Add small weekly bars in the secondary summary area.
 - Do not use large generic dashboard tracks everywhere.
 
+Right-side insight widget:
+
+- Use manual tabs or segmented pills: `Сегодня`, `Неделя`, `История`, `Финиш`.
+- Do not auto-rotate.
+- Default to `Сегодня`.
+- `Сегодня`: prompt to update the active book, with `+10 страниц` and `Обновить`.
+- `Неделя`: show pages read, current streak, and finished count.
+- `История`: show recent progress entries and status changes. This uses `ProgressEntry` and `StatusHistoryEntry`; it is not a notes feature.
+- `Финиш`: show remaining pages for unfinished books, or rating, tags, finish date, and status history for finished books.
+- Keep the container height stable across tabs on desktop.
+
 Empty state:
 
-- Show a composed empty shelf with one primary action: `Add book`.
-- Copy: "Start with the book on your nightstand."
+- Show a composed empty shelf with one primary action: `Добавить книгу`.
+- Copy: "Начните с книги на прикроватной тумбочке."
 
 ### Library
 
@@ -177,8 +216,8 @@ Purpose: browse and manage the personal shelf.
 Required controls:
 
 - Search input
-- Status segmented control: `Reading`, `Want`, `Finished`, `Paused`, `All`
-- Sort menu: `Recently updated`, `Title`, `Author`, `Progress`
+- Status segmented control: `Читаю`, `Планирую`, `Прочитано`, `Пауза`, `Все`
+- Sort menu: `Недавно обновленные`, `Название`, `Автор`, `Прогресс`
 
 Grid:
 
@@ -198,7 +237,7 @@ Book card content:
 
 Empty filtered state:
 
-- Explain the empty status and offer `Clear filters` or `Add book`.
+- Explain the empty status and offer `Сбросить фильтры` or `Добавить книгу`.
 
 ### Add/Edit Book
 
@@ -209,6 +248,7 @@ Flow:
 - Search by title or author.
 - Show metadata suggestions when available.
 - Manual entry is always visible or one click away.
+- MVP metadata search is stub-only: keep the UI and error state ready, but do not require a real external provider.
 
 Fields:
 
@@ -230,7 +270,7 @@ Validation:
 Search error:
 
 - Keep the manual form usable.
-- Message: "Search is unavailable. You can still add the book manually."
+- Message: "Поиск недоступен. Книгу все равно можно добавить вручную."
 
 ### Book Detail
 
@@ -252,7 +292,7 @@ Progress history:
 
 Finish flow:
 
-- When current page reaches total pages, suggest `Mark as finished`.
+- When current page reaches total pages, suggest `Завершить книгу`.
 - On finish, prompt for rating and tags.
 - Do not block finishing if rating/tags are skipped.
 
@@ -263,7 +303,7 @@ Finish flow:
 Primary:
 
 - Pill shape
-- Dark olive background in light mode
+- Dark graphite background in light mode
 - Light text with WCAG AA contrast
 - Active state: translate down `1px`
 
@@ -387,10 +427,10 @@ Global states:
 
 Book states:
 
-- Want to read
-- Reading
-- Paused
-- Finished
+- Планирую
+- Читаю
+- Пауза
+- Прочитано
 - Missing cover
 - Invalid page input
 

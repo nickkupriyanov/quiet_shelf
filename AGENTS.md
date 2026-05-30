@@ -2,7 +2,7 @@
 
 ## Project
 
-Bookshelf is a personal web app for tracking reading progress. The MVP is a private, local-first reading tracker: no accounts, sync, friends, clubs, public profiles, recommendations, or achievements in v1.
+QuietShelf is a personal web app for tracking reading progress. The MVP is a private, local-first reading tracker: no accounts, sync, friends, clubs, public profiles, recommendations, or achievements in v1.
 
 The product should help one reader answer three questions quickly:
 
@@ -11,6 +11,8 @@ The product should help one reader answer three questions quickly:
 - What is on my personal shelf?
 
 Future social features are important, but they are not part of the MVP. Preserve the data signals that will support them later: tags, ratings, finished dates, reading cadence, and status history.
+
+Visible product copy must be in Russian. The brand name stays `QuietShelf` everywhere. TypeScript types, route names, enum values, repository interfaces, and internal API names stay in English.
 
 ## Source Of Truth
 
@@ -65,6 +67,7 @@ Recommended domain concepts:
 - `Book`
 - `ReadingStatus`
 - `ProgressEntry`
+- `StatusHistoryEntry`
 - `Rating`
 - `Tag`
 - `BookRepository`
@@ -77,16 +80,18 @@ Follow `docs/ui-spec.md`.
 
 Core visual idea:
 
-- Object-led dashboard: the active book cover is the main visual anchor.
-- Warm bookshelf language: tactile, calm, personal, not generic SaaS.
+- Soft product dashboard: full-width milk-white app shell, compact top navigation, and calm modular cards.
+- Object-led reading: the active book cover is the main visual anchor.
+- Shelf rhythm: books feel browsable through cover proportions and grouped cards, not literal shelf decoration.
 - Sage-green progress system: progress feels recognizable but not like a fitness app.
 
 Important constraints:
 
-- Use a warm paper, olive, sage, muted burgundy, and restrained gold palette.
-- Do not introduce blue, purple, neon, or multiple competing accents.
+- Use a milk-white shell, graphite actions, sage progress, and pastel mint/lilac/peach/rose supporting modules.
+- Do not use muddy olive as the dominant surface color.
+- Do not introduce neon or saturated blue/purple glows.
 - Use modern sans-serif typography. Avoid serif as the default.
-- Use soft radii consistently: panels `16px`, cards/inputs `12px`, buttons pill-shaped.
+- Use soft radii consistently: app shell `20px`, panels `18-20px`, cards/inputs `12-14px`, buttons pill-shaped.
 - Motion should be quiet: hover, active press, subtle entrance, reduced-motion support.
 - Avoid fake dashboards, decorative status dots, generic three-card layouts, and ornamental clutter.
 
@@ -103,13 +108,14 @@ Book entry:
 
 - Manual entry must always work.
 - External metadata search is a convenience only.
+- MVP metadata search is stub-only: keep the UI, loading, and error states ready, but do not require a real external provider.
 - Search errors must not block adding a book.
 
 Taste signals:
 
 - Ratings are `1-5`.
 - Tags are short freeform labels.
-- Preserve finished dates and progress history for future social matching.
+- Preserve finished dates, progress history, and status history for future social matching.
 
 ## UX States
 
@@ -157,6 +163,7 @@ When implementation begins, cover:
 - Do not add unrelated refactors while implementing a feature.
 - Do not expose future social navigation unless the screens exist.
 - Keep visible copy plain and useful.
+- Keep all visible UI copy in Russian, except the `QuietShelf` brand.
 - Avoid em dashes in visible UI copy.
 
 ## Documentation Maintenance

@@ -1,0 +1,1057 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Мокап QuietShelf MVP</title>
+    <style>
+      :root {
+        --text-primary: #1d2730;
+        --text-secondary: #65707a;
+        --text-muted: #8b96a1;
+        --surface-shell: #f8f7f2;
+        --surface-card: #fffefa;
+        --surface-soft: #f2efe8;
+        --border-soft: #e7e2da;
+        --accent-ink: #243241;
+        --accent-sage: #7d9b77;
+        --accent-mint: #dff3db;
+        --accent-lilac: #ede5ff;
+        --accent-lavender: #c9b8ff;
+        --accent-peach: #ffe3c5;
+        --accent-rose: #f2c8ca;
+        --accent-gold: #f0c66e;
+        --shadow-card: 0 14px 34px rgb(33 42 53 / 0.08);
+        --shadow-cover: 0 20px 38px rgb(42 48 57 / 0.2);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        min-height: 100dvh;
+        margin: 0;
+        padding: 18px;
+        color: var(--text-primary);
+        background:
+          radial-gradient(circle at 12% 10%, #8178d8 0, transparent 30%),
+          radial-gradient(circle at 88% 16%, #40506c 0, transparent 31%),
+          linear-gradient(135deg, #243342, #665fb2 48%, #233640);
+        font-family:
+          Geist,
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif;
+      }
+
+      button,
+      input,
+      select {
+        font: inherit;
+      }
+
+      button {
+        cursor: pointer;
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+
+      .app-shell {
+        min-height: calc(100dvh - 36px);
+        overflow: hidden;
+        border: 1px solid rgb(255 255 255 / 0.72);
+        border-radius: 24px;
+        background:
+          linear-gradient(135deg, rgb(255 255 255 / 0.9), rgb(247 243 255 / 0.84)),
+          var(--surface-shell);
+        box-shadow: 0 34px 95px rgb(20 28 40 / 0.3);
+      }
+
+      .top-nav {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        gap: 24px;
+        align-items: center;
+        padding: 14px 18px;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 850;
+      }
+
+      .brand-mark {
+        width: 34px;
+        height: 34px;
+        display: grid;
+        place-items: center;
+        border: 1px solid #d6d8df;
+        border-radius: 12px;
+        background:
+          linear-gradient(135deg, rgb(255 255 255 / 0.78), rgb(229 238 221 / 0.92)),
+          var(--surface-card);
+      }
+
+      .brand-mark::before {
+        content: "";
+        width: 18px;
+        height: 12px;
+        border: 2px solid var(--accent-ink);
+        border-radius: 999px;
+        box-shadow: inset 0 0 0 2px var(--surface-card);
+      }
+
+      .tabs,
+      .widget-tabs {
+        display: flex;
+        gap: 8px;
+        min-width: 0;
+      }
+
+      .tabs {
+        justify-content: center;
+      }
+
+      .tabs a,
+      .widget-tabs button {
+        min-height: 36px;
+        display: inline-flex;
+        align-items: center;
+        border-radius: 999px;
+        font-weight: 760;
+        white-space: nowrap;
+      }
+
+      .tabs a {
+        padding: 0 18px;
+        color: var(--text-secondary);
+        font-size: 14px;
+        text-decoration: none;
+      }
+
+      .tabs a.active,
+      .widget-tabs button.active {
+        color: #fffefa;
+        background: var(--accent-ink);
+      }
+
+      .top-actions {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+      }
+
+      .icon-button {
+        width: 38px;
+        height: 38px;
+        border: 1px solid var(--border-soft);
+        border-radius: 999px;
+        background: var(--surface-card);
+        color: var(--accent-ink);
+        font-weight: 850;
+      }
+
+      .avatar {
+        width: 38px;
+        height: 38px;
+        border-radius: 999px;
+        border: 2px solid #fffefa;
+        background:
+          radial-gradient(circle at 50% 34%, #f4c6a4 0 18%, transparent 19%),
+          linear-gradient(135deg, #2f4154, #bf8f78);
+      }
+
+      .dashboard {
+        display: grid;
+        grid-template-columns: minmax(0, 1.6fr) minmax(340px, 0.68fr);
+        gap: 14px;
+        padding: 0 18px 18px;
+      }
+
+      .left,
+      .right {
+        display: grid;
+        gap: 14px;
+        align-content: start;
+      }
+
+      .panel {
+        border: 1px solid rgb(231 226 218 / 0.88);
+        border-radius: 22px;
+        background: rgb(255 254 250 / 0.94);
+        box-shadow: var(--shadow-card);
+      }
+
+      .calendar-strip {
+        display: grid;
+        grid-template-columns: repeat(7, minmax(0, 1fr));
+        gap: 8px;
+        padding: 12px;
+      }
+
+      .day {
+        min-height: 70px;
+        padding: 11px;
+        border-radius: 18px;
+        background: var(--surface-card);
+        color: var(--text-secondary);
+      }
+
+      .day strong {
+        display: block;
+        margin-top: 8px;
+        color: var(--text-primary);
+        font-size: 24px;
+        line-height: 1;
+      }
+
+      .day.active {
+        background: var(--accent-lilac);
+      }
+
+      .day.done {
+        background: var(--accent-mint);
+      }
+
+      .active-book {
+        display: grid;
+        grid-template-columns: 166px minmax(0, 1fr);
+        gap: 22px;
+        align-items: center;
+        padding: 22px;
+      }
+
+      .cover {
+        position: relative;
+        overflow: hidden;
+        aspect-ratio: 2 / 3;
+        border: 1px solid rgb(36 50 65 / 0.12);
+        border-radius: 12px;
+        background:
+          linear-gradient(145deg, #7a88b8, #ece2cf 52%, #bd7f75),
+          var(--accent-lilac);
+        box-shadow: var(--shadow-cover);
+      }
+
+      .cover.alt {
+        background: linear-gradient(145deg, #435b6e, #bfd8c4 56%, #eac99b);
+      }
+
+      .cover.gold {
+        background: linear-gradient(145deg, #f0c66e, #e3a691 52%, #856b95);
+      }
+
+      .cover-copy {
+        position: absolute;
+        inset: 16px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        color: #fffefa;
+        text-shadow: 0 1px 1px rgb(0 0 0 / 0.18);
+      }
+
+      .cover-title {
+        font-size: 24px;
+        font-weight: 850;
+        line-height: 1.04;
+      }
+
+      .cover-author {
+        font-size: 12px;
+      }
+
+      h1 {
+        max-width: 780px;
+        font-size: clamp(34px, 4.2vw, 58px);
+        line-height: 1.02;
+        letter-spacing: 0;
+      }
+
+      h2 {
+        font-size: 28px;
+        line-height: 1.1;
+      }
+
+      h3 {
+        font-size: 17px;
+        line-height: 1.15;
+      }
+
+      .muted {
+        color: var(--text-secondary);
+      }
+
+      .meta {
+        color: var(--text-muted);
+        font-size: 12px;
+        font-weight: 720;
+        line-height: 1.35;
+      }
+
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px;
+        margin-top: 12px;
+      }
+
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        min-height: 28px;
+        padding: 5px 10px;
+        border-radius: 999px;
+        background: var(--surface-soft);
+        color: var(--text-secondary);
+        font-size: 12px;
+        font-weight: 780;
+      }
+
+      .chip.rose {
+        background: #fae8ea;
+        color: #9a4f5b;
+      }
+
+      .book-text p {
+        margin-top: 6px;
+      }
+
+      .progress-copy {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        margin: 22px 0 8px;
+        font-size: 13px;
+        font-weight: 820;
+      }
+
+      .progress {
+        overflow: hidden;
+        height: 10px;
+        border-radius: 999px;
+        background: #ebe7dd;
+      }
+
+      .progress span {
+        display: block;
+        height: 100%;
+        border-radius: inherit;
+        background: linear-gradient(90deg, #879d7a, #bedaa5);
+      }
+
+      .button-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 9px;
+        margin-top: 16px;
+      }
+
+      .button {
+        min-height: 40px;
+        padding: 0 18px;
+        border: 1px solid transparent;
+        border-radius: 999px;
+        background: var(--accent-ink);
+        color: #fffefa;
+        font-weight: 840;
+      }
+
+      .button.secondary {
+        border-color: var(--border-soft);
+        background: var(--surface-card);
+        color: var(--accent-ink);
+      }
+
+      .button:active {
+        transform: translateY(1px);
+      }
+
+      .shelf {
+        padding: 16px;
+      }
+
+      .panel-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 14px;
+      }
+
+      .head-left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .round-icon {
+        width: 42px;
+        height: 42px;
+        display: grid;
+        place-items: center;
+        border-radius: 999px;
+        background: var(--accent-lilac);
+        color: var(--accent-ink);
+        font-weight: 900;
+      }
+
+      .library-tools {
+        display: grid;
+        grid-template-columns: minmax(180px, 1fr) auto auto;
+        gap: 10px;
+        margin-bottom: 14px;
+      }
+
+      .input,
+      .select {
+        width: 100%;
+        min-height: 39px;
+        border: 1px solid var(--border-soft);
+        border-radius: 14px;
+        background: var(--surface-card);
+        color: var(--text-primary);
+        padding: 0 12px;
+      }
+
+      .segments,
+      .widget-tabs {
+        padding: 4px;
+        border: 1px solid var(--border-soft);
+        border-radius: 999px;
+        background: #f0ece5;
+      }
+
+      .segments {
+        display: flex;
+        gap: 5px;
+      }
+
+      .segments button,
+      .widget-tabs button {
+        border: 0;
+        background: transparent;
+        color: var(--text-secondary);
+        font-size: 13px;
+        font-weight: 780;
+      }
+
+      .segments button {
+        min-height: 31px;
+        padding: 0 11px;
+        border-radius: 999px;
+      }
+
+      .segments button.active {
+        color: var(--text-primary);
+        background: var(--surface-card);
+        box-shadow: 0 6px 14px rgb(33 42 53 / 0.08);
+      }
+
+      .shelf-grid {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .book-tile {
+        min-height: 210px;
+        padding: 13px;
+        border-radius: 18px;
+        background: #eef7ee;
+      }
+
+      .book-tile:nth-child(2) {
+        background: #eef4ff;
+      }
+
+      .book-tile:nth-child(3) {
+        background: #fff0da;
+      }
+
+      .book-tile:nth-child(4) {
+        background: #f7edff;
+      }
+
+      .book-tile:nth-child(5) {
+        background: #fae8ea;
+      }
+
+      .tile-cover {
+        width: 76px;
+        margin-bottom: 12px;
+      }
+
+      .tile-cover .cover-copy {
+        inset: 11px;
+      }
+
+      .tile-cover .cover-title {
+        font-size: 17px;
+      }
+
+      .profile {
+        padding: 16px;
+      }
+
+      .profile-top {
+        display: grid;
+        grid-template-columns: 46px minmax(0, 1fr);
+        gap: 12px;
+        align-items: center;
+      }
+
+      .profile-stats {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px;
+        margin-top: 14px;
+      }
+
+      .profile-stat {
+        min-height: 60px;
+        padding: 10px;
+        border-radius: 16px;
+        background: var(--surface-card);
+      }
+
+      .profile-stat strong {
+        display: block;
+        font-size: 24px;
+        line-height: 1;
+      }
+
+      .actions-card {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        padding: 10px;
+      }
+
+      .actions-card .button {
+        width: 100%;
+      }
+
+      .insight {
+        min-height: 360px;
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .widget-tabs {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 4px;
+        margin: 14px 0;
+      }
+
+      .widget-tabs button {
+        min-height: 34px;
+        justify-content: center;
+        padding: 0 8px;
+        border-radius: 999px;
+      }
+
+      .insight-pane {
+        flex: 1;
+        display: grid;
+        gap: 10px;
+        align-content: start;
+        padding: 14px;
+        border-radius: 20px;
+        background:
+          radial-gradient(circle at 88% 86%, rgb(190 218 165 / 0.9), transparent 34%),
+          linear-gradient(135deg, #263544, #172330);
+        color: #fffefa;
+      }
+
+      .insight-pane .muted,
+      .insight-pane .meta {
+        color: rgb(255 254 250 / 0.72);
+      }
+
+      .insight-pane h2 {
+        font-size: 25px;
+      }
+
+      .insight-pane p {
+        line-height: 1.35;
+      }
+
+      .insight-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px;
+      }
+
+      .insight-mini {
+        padding: 12px;
+        border-radius: 16px;
+        background: rgb(255 255 255 / 0.1);
+      }
+
+      .insight-mini strong {
+        display: block;
+        font-size: 24px;
+      }
+
+      .history-list {
+        display: grid;
+        gap: 8px;
+      }
+
+      .history-item {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 10px 0;
+        border-bottom: 1px solid rgb(255 255 255 / 0.14);
+      }
+
+      .focus-preview-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+        margin-top: 12px;
+      }
+
+      .focus-preview {
+        min-height: 56px;
+        padding: 8px;
+        border: 1px solid rgb(231 226 218 / 0.76);
+        border-radius: 16px;
+        background: var(--surface-card);
+        color: var(--text-primary);
+      }
+
+      .focus-preview .meta {
+        color: var(--text-muted);
+      }
+
+      .focus-preview strong {
+        display: block;
+        margin: 4px 0 3px;
+        font-size: 14px;
+        line-height: 1.15;
+      }
+
+      .mobile-nav {
+        display: none;
+      }
+
+      @media (max-width: 1180px) {
+        .dashboard {
+          grid-template-columns: 1fr;
+        }
+
+        .right {
+          grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        }
+
+        .insight {
+          grid-column: 1 / -1;
+        }
+
+        .shelf-grid {
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+      }
+
+      @media (max-width: 760px) {
+        body {
+          padding: 0;
+          background: #eef0fb;
+        }
+
+        .app-shell {
+          min-height: 100dvh;
+          border: 0;
+          border-radius: 0;
+          box-shadow: none;
+        }
+
+        .top-nav {
+          position: sticky;
+          top: 0;
+          z-index: 5;
+          grid-template-columns: auto auto;
+          background: rgb(248 247 242 / 0.9);
+          backdrop-filter: blur(16px);
+          border-bottom: 1px solid var(--border-soft);
+        }
+
+        .tabs,
+        .top-actions .icon-button {
+          display: none;
+        }
+
+        .dashboard {
+          grid-template-columns: 1fr;
+          padding: 14px 14px calc(150px + env(safe-area-inset-bottom));
+        }
+
+        .left,
+        .right {
+          display: contents;
+        }
+
+        .calendar-strip {
+          display: flex;
+          overflow-x: auto;
+          order: 1;
+        }
+
+        .day {
+          min-width: 84px;
+        }
+
+        .right,
+        .actions-card,
+        .library-tools {
+          grid-template-columns: 1fr;
+        }
+
+        .active-book {
+          grid-template-columns: minmax(104px, 34vw) minmax(0, 1fr);
+          gap: 12px;
+          order: 2;
+          padding: 14px;
+          align-items: start;
+        }
+
+        .active-book .cover {
+          width: min(34vw, 124px);
+        }
+
+        h1 {
+          font-size: 28px;
+        }
+
+        .progress-copy {
+          align-items: flex-start;
+          flex-direction: column;
+          gap: 3px;
+          margin-top: 14px;
+        }
+
+        .button-row {
+          margin-top: 12px;
+        }
+
+        .shelf-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .profile {
+          order: 3;
+        }
+
+        .actions-card {
+          display: none;
+        }
+
+        .insight {
+          order: 4;
+          min-height: 0;
+        }
+
+        .shelf {
+          order: 5;
+        }
+
+        .book-tile {
+          display: grid;
+          grid-template-columns: 72px minmax(0, 1fr);
+          gap: 12px;
+          align-items: center;
+          min-height: 0;
+        }
+
+        .tile-cover {
+          width: 72px;
+          margin: 0;
+        }
+
+        .segments {
+          overflow-x: auto;
+          border-radius: 16px;
+        }
+
+        .widget-tabs {
+          overflow-x: auto;
+          display: flex;
+          border-radius: 16px;
+        }
+
+        .widget-tabs button {
+          min-width: 88px;
+        }
+
+        .insight-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .focus-preview-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .mobile-nav {
+          position: fixed;
+          z-index: 8;
+          left: 14px;
+          right: 14px;
+          bottom: calc(14px + env(safe-area-inset-bottom));
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 6px;
+          padding: 6px;
+          border: 1px solid var(--border-soft);
+          border-radius: 999px;
+          background: #fffefa;
+          box-shadow: 0 16px 34px rgb(33 42 53 / 0.18);
+        }
+
+        .mobile-nav a {
+          display: grid;
+          min-height: 40px;
+          place-items: center;
+          border-radius: 999px;
+          color: var(--text-secondary);
+          font-size: 13px;
+          font-weight: 780;
+          text-decoration: none;
+        }
+
+        .mobile-nav a.active {
+          color: #fffefa;
+          background: var(--accent-ink);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="top-nav" aria-label="Основная навигация">
+        <div class="brand">
+          <span class="brand-mark" aria-hidden="true"></span>
+          <span>QuietShelf</span>
+        </div>
+        <nav class="tabs">
+          <a class="active" href="#home">Главная</a>
+          <a href="#calendar">Ритм</a>
+          <a href="#library">Библиотека</a>
+          <a href="#add">Добавить</a>
+        </nav>
+        <div class="top-actions">
+          <button class="icon-button" aria-label="Поиск">⌕</button>
+          <button class="icon-button" aria-label="Уведомления">•</button>
+          <div class="avatar" aria-label="Профиль читателя"></div>
+        </div>
+      </header>
+
+      <main class="dashboard">
+        <div class="left">
+          <section class="panel calendar-strip" id="calendar" aria-label="Ритм чтения за неделю">
+            <article class="day done"><span>Вс</span><strong>11</strong><p class="meta">18 стр.</p></article>
+            <article class="day done"><span>Пн</span><strong>12</strong><p class="meta">24 стр.</p></article>
+            <article class="day active"><span>Вт</span><strong>13</strong><p class="meta">сегодня</p></article>
+            <article class="day"><span>Ср</span><strong>14</strong><p class="meta">план</p></article>
+            <article class="day done"><span>Чт</span><strong>15</strong><p class="meta">36 стр.</p></article>
+            <article class="day"><span>Пт</span><strong>16</strong><p class="meta">план</p></article>
+            <article class="day"><span>Сб</span><strong>17</strong><p class="meta">план</p></article>
+          </section>
+
+          <section class="panel active-book" id="home" aria-label="Активная книга">
+            <div class="cover" role="img" aria-label="Обложка книги Ночной сад">
+              <div class="cover-copy">
+                <div class="cover-title">Ночной сад</div>
+                <div class="cover-author">Мария Берг</div>
+              </div>
+            </div>
+            <div class="book-text">
+              <p class="meta">Сейчас читаю</p>
+              <h1>Ночной сад</h1>
+              <p class="muted">Мария Берг</p>
+              <div class="chips">
+                <span class="chip">212 из 340 страниц</span>
+                <span class="chip rose">вечернее чтение</span>
+              </div>
+              <div class="progress-copy">
+                <span>62% прочитано</span>
+                <span>осталось 128 страниц</span>
+              </div>
+              <div class="progress" aria-label="Прогресс чтения: 62%">
+                <span style="width: 62%"></span>
+              </div>
+              <div class="button-row">
+                <button class="button">+10 страниц</button>
+                <button class="button secondary">Обновить</button>
+              </div>
+            </div>
+          </section>
+
+          <section class="panel shelf" id="library" aria-labelledby="library-title">
+            <div class="panel-head">
+              <div class="head-left">
+                <span class="round-icon">✦</span>
+                <div>
+                  <h2 id="library-title">Полка</h2>
+                  <p class="meta">Читаю, прочитано и планирую.</p>
+                </div>
+              </div>
+              <button class="button">Добавить книгу</button>
+            </div>
+            <div class="library-tools">
+              <input class="input" aria-label="Поиск по библиотеке" value="сад" />
+              <div class="segments" aria-label="Фильтр статуса">
+                <button>Прочитано</button>
+                <button class="active">Читаю</button>
+                <button>Планирую</button>
+                <button>Пауза</button>
+              </div>
+              <select class="select" aria-label="Сортировка">
+                <option>Недавно обновленные</option>
+                <option>Название</option>
+                <option>Автор</option>
+                <option>Прогресс</option>
+              </select>
+            </div>
+            <div class="shelf-grid">
+              <article class="book-tile">
+                <div class="cover tile-cover" aria-hidden="true">
+                  <div class="cover-copy"><div class="cover-title">Ночной сад</div></div>
+                </div>
+                <div>
+                  <h3>Ночной сад</h3>
+                  <p class="meta">Читаю, 62%</p>
+                </div>
+              </article>
+              <article class="book-tile">
+                <div class="cover tile-cover alt" aria-hidden="true">
+                  <div class="cover-copy"><div class="cover-title">Тихие числа</div></div>
+                </div>
+                <div>
+                  <h3>Тихие числа</h3>
+                  <p class="meta">Пауза, 25%</p>
+                </div>
+              </article>
+              <article class="book-tile">
+                <div class="cover tile-cover gold" aria-hidden="true">
+                  <div class="cover-copy"><div class="cover-title">Короткая зима</div></div>
+                </div>
+                <div>
+                  <h3>Короткая зима</h3>
+                  <p class="meta">Прочитано, 5 из 5</p>
+                </div>
+              </article>
+              <article class="book-tile">
+                <div class="cover tile-cover alt" aria-hidden="true">
+                  <div class="cover-copy"><div class="cover-title">Карта дома</div></div>
+                </div>
+                <div>
+                  <h3>Карта дома</h3>
+                  <p class="meta">Планирую</p>
+                </div>
+              </article>
+              <article class="book-tile">
+                <div class="cover tile-cover" aria-hidden="true">
+                  <div class="cover-copy"><div class="cover-title">После дождя</div></div>
+                </div>
+                <div>
+                  <h3>После дождя</h3>
+                  <p class="meta">Читаю, 9%</p>
+                </div>
+              </article>
+            </div>
+          </section>
+        </div>
+
+        <aside class="right" aria-label="Панель читателя">
+          <section class="panel profile">
+            <div class="profile-top">
+              <div class="avatar" aria-hidden="true"></div>
+              <div>
+                <h2>Николай</h2>
+                <p class="meta">Личная статистика чтения</p>
+              </div>
+            </div>
+            <div class="profile-stats">
+              <article class="profile-stat"><strong>12</strong><p class="meta">дней серии</p></article>
+              <article class="profile-stat"><strong>3</strong><p class="meta">книги читаю</p></article>
+              <article class="profile-stat"><strong>5000</strong><p class="meta">страниц всего</p></article>
+            </div>
+          </section>
+
+          <section class="panel actions-card" id="add">
+            <button class="button">Добавить</button>
+            <button class="button secondary">Настройки</button>
+          </section>
+
+          <section class="panel insight" aria-labelledby="insight-title">
+            <div class="panel-head">
+              <div>
+                <h2 id="insight-title">Фокус</h2>
+                <p class="meta">Один блок, четыре полезных режима.</p>
+              </div>
+            </div>
+            <div class="widget-tabs" role="tablist" aria-label="Режимы блока Фокус">
+              <button class="active" role="tab">Сегодня</button>
+              <button role="tab">Неделя</button>
+              <button role="tab">История</button>
+              <button role="tab">Финиш</button>
+            </div>
+            <div class="insight-pane">
+              <p class="meta">Сегодня</p>
+              <h2>Обновите прогресс по «Ночному саду»</h2>
+              <p class="muted">Если прочитали хотя бы несколько страниц, зафиксируйте ритм. День попадет в серию.</p>
+              <div class="button-row">
+                <button class="button" style="background: #fffefa; color: var(--accent-ink)">+10 страниц</button>
+                <button class="button secondary">Обновить</button>
+              </div>
+              <div class="focus-preview-grid" aria-label="Превью режимов Фокус">
+                <article class="focus-preview">
+                  <p class="meta">Неделя</p>
+                  <strong>146 страниц, 5 дней</strong>
+                  <p class="meta">Законченных книг пока нет.</p>
+                </article>
+                <article class="focus-preview">
+                  <p class="meta">История</p>
+                  <strong>+24 страницы вчера</strong>
+                  <p class="meta">Статус остался «Читаю».</p>
+                </article>
+                <article class="focus-preview">
+                  <p class="meta">Финиш</p>
+                  <strong>128 страниц до конца</strong>
+                  <p class="meta">Оценка и теги появятся после завершения.</p>
+                </article>
+                <article class="focus-preview">
+                  <p class="meta">Сегодня</p>
+                  <strong>Главное действие: +10 страниц</strong>
+                  <p class="meta">Без автопрокрутки и лишнего шума.</p>
+                </article>
+              </div>
+            </div>
+          </section>
+        </aside>
+      </main>
+
+      <nav class="mobile-nav" aria-label="Нижняя навигация">
+        <a class="active" href="#home">Главная</a>
+        <a href="#library">Библиотека</a>
+        <a href="#add">Добавить</a>
+      </nav>
+    </div>
+  </body>
+</html>

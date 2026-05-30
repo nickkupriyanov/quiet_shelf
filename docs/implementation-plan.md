@@ -1,12 +1,14 @@
-# Bookshelf MVP Implementation Plan
+# QuietShelf MVP Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Build the local-first Bookshelf MVP described in `docs/app-spec.md` and styled according to `docs/ui-spec.md`.
+**Goal:** Build the local-first QuietShelf MVP described in `docs/app-spec.md` and styled according to `docs/ui-spec.md`.
 
 **Architecture:** Next.js App Router renders the product shell and routes. Domain logic lives outside React, persistence is hidden behind a `BookRepository`, and the first repository implementation uses IndexedDB. UI flows consume the repository through client-side hooks so a future `Next API + Postgres` repository can replace local persistence without rewriting screens.
 
 **Tech Stack:** Next.js, TypeScript, Tailwind CSS, IndexedDB via Dexie, Vitest, React Testing Library, Playwright, Tabler icons.
+
+**Localization:** All visible UI copy is Russian. The brand remains `QuietShelf`. TypeScript types, route names, enum values, repository methods, and internal API names remain English.
 
 ---
 
@@ -50,10 +52,51 @@ test/
   persistence/
     dexie-book-repository.test.ts
 e2e/
-  bookshelf.spec.ts
+  quietshelf.spec.ts
 ```
 
 Keep files focused. Do not put domain validation, IndexedDB calls, and JSX in the same file.
+
+## Task 0: Create And Review The Design Mockup
+
+**Files:**
+
+- Create: `docs/mockups/quietshelf-mvp.html`
+- Modify: `docs/ui-spec.md` only if review changes the visual direction.
+
+- [ ] **Step 1: Build the disposable HTML mockup**
+
+Create a static HTML/CSS mockup that shows:
+
+- Full-width home dashboard with a seven-day reading cadence strip, an active book, a profile summary, actions, and a right-side insight widget.
+- Library with search, filters, sorting, and shelf-like cards.
+- Empty library or add-book flow.
+- Desktop and mobile responsive behavior.
+
+Rules:
+
+- Visible copy is Russian.
+- Brand in the shell is `QuietShelf`.
+- Use the soft product dashboard direction from `docs/ui-spec.md`: milk-white shell, graphite actions, pastel modules, sage progress, and no muddy olive-dominant surfaces.
+- Do not use future social nav items or placeholder screens.
+- The insight widget uses manual tabs: `Сегодня`, `Неделя`, `История`, `Финиш`. Do not auto-rotate it.
+- This file is a design artifact, not production UI.
+
+- [ ] **Step 2: Review before app implementation**
+
+Open `docs/mockups/quietshelf-mvp.html` in a browser and review:
+
+- The active book is the strongest visual object.
+- `+10 страниц` is easy to reach.
+- The dashboard uses the full viewport width harmoniously on desktop.
+- The insight widget remains useful and stable across all four tabs.
+- Mobile order is `Ритм`, active book, profile summary, `Фокус`, then shelf.
+- Mobile bottom navigation does not obscure interactive content.
+- Library feels shelf-like without literal clutter.
+- Mobile has no horizontal overflow.
+- The visual direction still matches `docs/ui-spec.md`.
+
+Expected: design direction is approved before Task 1 starts.
 
 ## Task 1: Scaffold The App
 
@@ -70,17 +113,17 @@ Keep files focused. Do not put domain validation, IndexedDB calls, and JSX in th
 Run:
 
 ```bash
-npm create next-app@latest /private/tmp/bookshelf-next -- --ts --tailwind --eslint --app --src-dir --import-alias "@/*"
+npm create next-app@latest /private/tmp/quietshelf-next -- --ts --tailwind --eslint --app --src-dir --import-alias "@/*"
 ```
 
-Expected: a fresh Next.js project exists at `/private/tmp/bookshelf-next`.
+Expected: a fresh Next.js project exists at `/private/tmp/quietshelf-next`.
 
 - [ ] **Step 2: Copy scaffold files into this project**
 
-Run from `/Users/nickkupriyanov/Documents/projects/bookshelf`:
+Run from `/Users/nickkupriyanov/Documents/projects/quiet_shelf`:
 
 ```bash
-cp -R /private/tmp/bookshelf-next/. .
+cp -R /private/tmp/quietshelf-next/. .
 ```
 
 Expected: `package.json`, `src/app`, Tailwind config, and Next config exist while existing `docs/` and `AGENTS.md` remain.
@@ -128,7 +171,7 @@ Commit:
 
 ```bash
 git add .
-git commit -m "chore: scaffold bookshelves app"
+git commit -m "chore: scaffold quietshelf app"
 ```
 
 ## Task 2: Add Domain Model And Tests
@@ -207,6 +250,14 @@ export type ProgressEntry = {
   deltaPages: number;
   createdAt: string;
 };
+
+export type StatusHistoryEntry = {
+  id: string;
+  bookId: string;
+  fromStatus?: ReadingStatus;
+  toStatus: ReadingStatus;
+  createdAt: string;
+};
 ```
 
 Rules:
@@ -216,6 +267,7 @@ Rules:
 - `currentPage` is clamped to `0..totalPages`.
 - `rating` must be `1..5` when present.
 - `applyProgressUpdate(book, page)` returns a new book with updated `currentPage` and `updatedAt`.
+- status changes create `StatusHistoryEntry` records through the repository layer.
 - `calculateProgressPercent` returns a rounded whole number.
 
 - [ ] **Step 4: Define repository interface**
@@ -223,7 +275,7 @@ Rules:
 Create `src/domain/repository.ts`:
 
 ```ts
-import type { Book, ProgressEntry, ReadingStatus } from "./books";
+import type { Book, ProgressEntry, ReadingStatus, StatusHistoryEntry } from "./books";
 
 export type BookSort = "recently_updated" | "title" | "author" | "progress";
 
@@ -241,6 +293,8 @@ export type BookRepository = {
   listBooks(query?: BookQuery): Promise<Book[]>;
   addProgressEntry(entry: Omit<ProgressEntry, "id" | "createdAt">): Promise<ProgressEntry>;
   listProgressEntries(bookId: string): Promise<ProgressEntry[]>;
+  addStatusHistoryEntry(entry: Omit<StatusHistoryEntry, "id" | "createdAt">): Promise<StatusHistoryEntry>;
+  listStatusHistoryEntries(bookId: string): Promise<StatusHistoryEntry[]>;
 };
 ```
 
@@ -278,6 +332,7 @@ it("filters by status");
 it("searches title, author, and tags");
 it("sorts by progress");
 it("stores progress entries");
+it("stores status history entries");
 ```
 
 Use a unique IndexedDB database name per test and delete it after each test.
@@ -289,6 +344,7 @@ Create a Dexie database with:
 ```ts
 books: "id, title, author, status, updatedAt"
 progressEntries: "id, bookId, createdAt"
+statusHistoryEntries: "id, bookId, createdAt"
 ```
 
 Implement the full `BookRepository` interface.
@@ -325,17 +381,22 @@ Define CSS variables from `docs/ui-spec.md` for light and dark mode:
 
 ```css
 :root {
-  --surface-base: #f3efe5;
-  --surface-raised: #fffaf2;
-  --surface-muted: #e9e1d1;
-  --surface-shelf: #d8c7aa;
-  --text-primary: #243025;
-  --text-secondary: #6b6256;
-  --border-soft: #d7cec0;
-  --accent-primary: #536f48;
-  --accent-primary-dark: #34452f;
-  --accent-secondary: #8b3f47;
-  --accent-gold: #c9a968;
+  --surface-page: #f2f1fb;
+  --surface-shell: #f8f7f2;
+  --surface-card: #fffefa;
+  --surface-soft: #f2efe8;
+  --text-primary: #1d2730;
+  --text-secondary: #65707a;
+  --text-muted: #8b96a1;
+  --border-soft: #e7e2da;
+  --accent-ink: #243241;
+  --accent-sage: #7d9b77;
+  --accent-mint: #dff3db;
+  --accent-lilac: #ede5ff;
+  --accent-lavender: #c9b8ff;
+  --accent-peach: #ffe3c5;
+  --accent-rose: #f2c8ca;
+  --accent-gold: #f0c66e;
 }
 ```
 
@@ -345,7 +406,7 @@ Add matching dark variables under `@media (prefers-color-scheme: dark)`.
 
 Implement:
 
-- Desktop left rail with `Bookshelf`, `Home`, `Library`, `Add`.
+- Desktop full-width rounded app shell with compact top navigation: `QuietShelf`, `Главная`, `Ритм`, `Библиотека`, `Добавить`.
 - Mobile top bar and bottom navigation.
 - No future social nav items.
 
@@ -404,7 +465,7 @@ Requirements:
 Requirements:
 
 - Weekly summary shows pages this week and current streak.
-- Empty state uses copy: `Start with the book on your nightstand.`
+- Empty state uses copy: `Начните с книги на прикроватной тумбочке.`
 
 - [ ] **Step 5: Verify and commit**
 
@@ -420,7 +481,7 @@ Commit:
 
 ```bash
 git add src/components
-git commit -m "feat: add bookshelf ui components"
+git commit -m "feat: add quietshelf ui components"
 ```
 
 ## Task 6: Add Book State Hook
@@ -483,8 +544,8 @@ Include:
 - Active-book hero.
 - Large cover.
 - Title, author, current page, total pages, progress.
-- `+10 pages` quick action.
-- `Update` exact page action.
+- `+10 страниц` quick action.
+- `Обновить` exact page action.
 - Weekly summary.
 - Current streak.
 - Continue shelf.
@@ -494,7 +555,7 @@ Include:
 
 Manually confirm:
 
-- `+10 pages` updates the active book.
+- `+10 страниц` updates the active book.
 - Progress does not exceed total pages.
 - Empty state appears when there are no books.
 
@@ -520,7 +581,7 @@ Include:
 - Sort menu.
 - Book grid on desktop.
 - Compact book rows on mobile.
-- Empty filtered state with `Clear filters` and `Add book`.
+- Empty filtered state with `Сбросить фильтры` and `Добавить книгу`.
 
 - [ ] **Step 2: Verify behavior**
 
@@ -549,31 +610,31 @@ git commit -m "feat: build library screen"
 
 - [ ] **Step 1: Implement metadata search stub**
 
-Create `searchBookMetadata(query)` that returns an empty array when no provider is configured. This keeps the UI ready for real API search while preserving manual entry.
+Create `searchBookMetadata(query)` that returns an empty array when no provider is configured. This keeps the UI ready for real API search while preserving manual entry. The MVP must not depend on a real external metadata provider.
 
 - [ ] **Step 2: Implement book form**
 
 Fields:
 
-- Title
-- Author
-- Total pages
-- Cover URL
-- Status
-- Current page
-- Tags
-- Rating
+- Название
+- Автор
+- Всего страниц
+- URL обложки
+- Статус
+- Текущая страница
+- Теги
+- Оценка
 
 Validation:
 
-- Title required.
+- Название required.
 - Total pages positive.
 - Current page within range.
 - Rating `1..5` when present.
 
 - [ ] **Step 3: Wire add/edit access**
 
-Use a modal or dedicated inline panel reachable from `Add` actions in shell, home, and library.
+Use a modal or dedicated inline panel reachable from `Добавить` actions in shell, home, and library.
 
 - [ ] **Step 4: Commit**
 
@@ -615,7 +676,7 @@ git commit -m "feat: build book detail screen"
 
 **Files:**
 
-- Create: `e2e/bookshelf.spec.ts`
+- Create: `e2e/quietshelf.spec.ts`
 - Update: unit and repository tests as needed
 
 - [ ] **Step 1: Add Playwright config**
@@ -626,11 +687,11 @@ Configure Playwright to run against `http://127.0.0.1:3000`.
 
 Cover:
 
-- Add a book manually.
-- Update progress from home.
+- Add a book manually using Russian labels.
+- Update progress from home using `+10 страниц`.
 - Filter in library.
 - Open detail.
-- Finish book.
+- Finish a book using Russian labels.
 - Add rating and tags.
 
 - [ ] **Step 3: Run verification**
@@ -649,7 +710,7 @@ Expected: all checks pass.
 
 ```bash
 git add e2e test playwright.config.*
-git commit -m "test: cover bookshelf mvp flows"
+git commit -m "test: cover quietshelf mvp flows"
 ```
 
 ## Task 12: Final Polish And Documentation Check
@@ -682,17 +743,18 @@ Check:
 - Progress is readable as text and visual state.
 - Mobile layout has no horizontal overflow.
 - Dark mode keeps contrast and the same design language.
+- Visible copy is Russian except the `QuietShelf` brand.
 
 - [ ] **Step 3: Commit final polish**
 
 ```bash
 git add .
-git commit -m "chore: polish bookshelf mvp"
+git commit -m "chore: polish quietshelf mvp"
 ```
 
 ## Self-Review
 
-- Spec coverage: app scope, domain model, repository boundary, UI screens, states, local-first storage, tests, and future social readiness are covered.
+- Spec coverage: app scope, domain model, repository boundary, UI screens, states, local-first storage, tests, Russian visible copy, and future social readiness are covered.
 - Placeholder scan: no unresolved placeholder markers or undefined future work is required for MVP.
-- Type consistency: `Book`, `ReadingStatus`, `ProgressEntry`, `BookRepository`, and route responsibilities match `docs/app-spec.md`.
+- Type consistency: `Book`, `ReadingStatus`, `ProgressEntry`, `StatusHistoryEntry`, `BookRepository`, and route responsibilities match `docs/app-spec.md`.
 - UI consistency: visual requirements defer to `docs/ui-spec.md` and are explicitly checked in final polish.
