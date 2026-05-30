@@ -32,7 +32,7 @@ export function SegmentedControl<T extends string>({
               className={[
                 "min-h-10 rounded-full px-4 text-sm font-medium transition",
                 selected
-                  ? "bg-ink text-shell shadow-sm"
+                  ? "bg-ink text-[#f8f7f2] shadow-sm"
                   : "text-secondary hover:bg-card hover:text-primary",
               ].join(" ")}
             >

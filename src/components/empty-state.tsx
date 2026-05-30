@@ -22,7 +22,7 @@ export function EmptyState({
       </h2>
       <Link
         href={actionHref}
-        className="mt-6 inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-ink px-5 text-sm font-semibold text-[var(--surface-shell)]"
+        className="mt-6 inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-ink px-5 text-sm font-semibold text-[#f8f7f2]"
       >
         <IconPlus size={18} aria-hidden="true" />
         {actionLabel}

@@ -39,7 +39,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </nav>
           <Link
             href="/library?add=1"
-            className="inline-flex min-h-11 items-center justify-center rounded-full bg-ink px-4 text-sm font-semibold text-[var(--surface-shell)] transition hover:translate-y-[-1px]"
+            className="inline-flex min-h-11 items-center justify-center rounded-full bg-ink px-4 text-sm font-semibold text-[#f8f7f2] transition hover:translate-y-[-1px]"
           >
             <IconPlus size={18} stroke={2} aria-hidden="true" />
             <span className="sr-only sm:not-sr-only sm:ml-2">Добавить</span>
