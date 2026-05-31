@@ -14,9 +14,48 @@ const statusLabels: Record<ReadingStatus, string> = {
 
 type BookCardProps = {
   book: Book;
+  variant?: "row" | "tile";
 };
 
-export function BookCard({ book }: BookCardProps) {
+export function BookCard({ book, variant = "row" }: BookCardProps) {
+  if (variant === "tile") {
+    return (
+      <Link
+        href={`/books/${book.id}`}
+        className="group min-h-[230px] rounded-[18px] bg-mint p-3 transition hover:-translate-y-0.5 hover:shadow-[0_14px_34px_rgba(36,50,65,0.10)] even:bg-[#eef4ff] [&:nth-child(3n)]:bg-peach [&:nth-child(4n)]:bg-lilac [&:nth-child(5n)]:bg-rose"
+      >
+        <div className="w-[82px]">
+          <BookCover
+            title={book.title}
+            author={book.author}
+            coverUrl={book.coverUrl}
+            size="thumb"
+          />
+        </div>
+        <div className="mt-3 min-w-0">
+          <p className="line-clamp-2 text-[17px] font-black leading-tight text-primary">
+            {book.title}
+          </p>
+          {book.author ? (
+            <p className="mt-1 line-clamp-1 text-sm font-medium text-secondary">
+              {book.author}
+            </p>
+          ) : null}
+          <span className="mt-3 inline-flex rounded-full bg-card/80 px-2.5 py-1 text-xs font-bold text-secondary">
+            {statusLabels[book.status]}
+          </span>
+          <div className="mt-3">
+            <BookProgress
+              currentPage={book.currentPage}
+              totalPages={book.totalPages}
+              compact
+            />
+          </div>
+        </div>
+      </Link>
+    );
+  }
+
   return (
     <Link
       href={`/books/${book.id}`}
@@ -26,6 +65,7 @@ export function BookCard({ book }: BookCardProps) {
         title={book.title}
         author={book.author}
         coverUrl={book.coverUrl}
+        size="thumb"
       />
       <div className="min-w-0 py-1">
         <div className="flex items-start justify-between gap-3">

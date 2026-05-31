@@ -1,6 +1,7 @@
 type DaySummary = {
   label: string;
   pages: number;
+  current?: boolean;
 };
 
 type WeeklySummaryProps = {
@@ -14,38 +15,41 @@ export function WeeklySummary({
   currentStreak,
   days,
 }: WeeklySummaryProps) {
-  const maxPages = Math.max(...days.map((day) => day.pages), 1);
-
   return (
     <section
       id="rhythm"
-      className="rounded-[18px] border border-[#d3e7cf] bg-mint p-4 sm:p-5"
+      className="quiet-panel rounded-[22px] p-3"
       aria-label="Ритм чтения за неделю"
     >
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <h2 className="text-xl font-bold text-primary">Ритм</h2>
-          <p className="mt-1 text-sm text-secondary">
-            {pagesThisWeek} стр. за неделю
-          </p>
-        </div>
-        <div className="rounded-full bg-card px-3 py-1.5 text-sm font-semibold text-primary shadow-sm">
-          {currentStreak} дн.
-        </div>
-      </div>
-      <div className="mt-4 grid grid-cols-7 items-end gap-2">
-        {days.map((day) => (
-          <div key={day.label} className="grid gap-2 text-center">
-            <div className="flex h-16 items-end rounded-full bg-card/80 p-1 shadow-inner sm:h-20">
-              <div
-                className="w-full rounded-full bg-sage"
-                style={{ height: `${Math.max((day.pages / maxPages) * 100, 8)}%` }}
-                aria-hidden="true"
-              />
-            </div>
-            <span className="text-xs font-medium text-secondary">{day.label}</span>
-          </div>
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 lg:grid-cols-7">
+        {days.map((day, index) => (
+          <article
+            key={day.label}
+            className={[
+              "min-h-[76px] rounded-[18px] p-3 text-secondary",
+              day.current
+                ? "bg-lilac"
+                : day.pages > 0
+                  ? "bg-mint"
+                  : "bg-card",
+            ].join(" ")}
+          >
+            <span className="text-xs font-bold">{day.label}</span>
+            <strong className="mt-2 block text-2xl font-black leading-none text-primary">
+              {day.pages || (index + 7)}
+            </strong>
+            <p className="mt-1 text-xs font-semibold text-muted">
+              {day.current ? "сегодня" : day.pages > 0 ? `${day.pages} стр.` : "план"}
+            </p>
+          </article>
         ))}
+      </div>
+      <div className="mt-3 flex flex-wrap items-center justify-between gap-3 px-1">
+        <p className="text-sm font-bold text-primary">Ритм</p>
+        <div className="flex gap-2 text-xs font-bold text-secondary">
+          <span>{pagesThisWeek} стр. за неделю</span>
+          <span className="rounded-full bg-soft px-2 text-primary">{currentStreak} дн.</span>
+        </div>
       </div>
     </section>
   );

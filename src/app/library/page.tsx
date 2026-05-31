@@ -53,39 +53,36 @@ export default function LibraryPage() {
 
   return (
     <div className="grid min-w-0 gap-5">
-      <section className="min-w-0 rounded-[20px] border border-border-soft bg-card p-5">
+      <section className="quiet-panel min-w-0 rounded-[22px] p-4">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <p className="font-mono text-sm text-secondary">Библиотека</p>
-            <h1 className="mt-2 text-4xl font-bold tracking-normal text-primary">
+            <p className="font-mono text-sm font-bold text-secondary">Библиотека</p>
+            <h1 className="mt-2 text-[clamp(34px,4vw,52px)] font-black leading-none tracking-normal text-primary">
               Личная полка
             </h1>
           </div>
           <button
             type="button"
             onClick={() => setShowForm(true)}
-            className="inline-flex min-h-11 w-fit items-center justify-center gap-2 rounded-full bg-ink px-5 text-sm font-semibold text-[#f8f7f2]"
+            className="quiet-cta inline-flex min-h-11 w-fit items-center justify-center gap-2 rounded-full px-5 text-sm font-black"
           >
             <IconPlus size={18} aria-hidden="true" />
             Добавить книгу
           </button>
         </div>
 
-        <div className="mt-6 grid min-w-0 gap-4 xl:grid-cols-[minmax(240px,1fr)_auto_260px] xl:items-end">
+        <div className="mt-5 grid min-w-0 gap-3 xl:grid-cols-[minmax(220px,1fr)_auto_240px] xl:items-end">
           <div>
-            <label
-              htmlFor="library-search"
-              className="mb-2 block text-sm font-medium text-secondary"
-            >
+            <label htmlFor="library-search" className="mb-2 block text-sm font-bold text-secondary">
               Поиск
             </label>
-            <div className="flex min-h-12 items-center gap-2 rounded-full border border-border-soft bg-shell px-4">
+            <div className="flex min-h-10 items-center gap-2 rounded-[14px] border border-border-soft bg-card px-3">
               <IconSearch size={18} className="text-muted" aria-hidden="true" />
               <input
                 id="library-search"
                 value={search}
                 onChange={(event) => setSearch(event.target.value)}
-                className="min-w-0 flex-1 bg-transparent text-primary outline-none placeholder:text-muted"
+                className="min-w-0 flex-1 bg-transparent text-sm font-semibold text-primary outline-none placeholder:text-muted"
                 placeholder="Название, автор или тег"
               />
             </div>
@@ -109,7 +106,7 @@ export default function LibraryPage() {
               id="library-sort"
               value={sort}
               onChange={(event) => setSort(event.target.value as BookSort)}
-              className="min-h-12 w-full rounded-full border border-border-soft bg-shell px-4 text-primary"
+              className="min-h-10 w-full rounded-[14px] border border-border-soft bg-card px-3 text-sm font-semibold text-primary"
             >
               {(Object.keys(sortLabels) as BookSort[]).map((value) => (
                 <option key={value} value={value}>
@@ -128,11 +125,11 @@ export default function LibraryPage() {
       ) : null}
 
       {showForm ? (
-        <section className="min-w-0 rounded-[20px] border border-border-soft bg-card p-5 shadow-[0_18px_60px_rgba(36,50,65,0.10)]">
+        <section className="quiet-panel min-w-0 rounded-[22px] p-5">
           <div className="mb-5 flex items-start justify-between gap-4">
             <div>
-              <h2 className="text-2xl font-bold text-primary">Добавить книгу</h2>
-              <p className="mt-1 text-sm text-secondary">
+              <h2 className="text-2xl font-black text-primary">Добавить книгу</h2>
+              <p className="mt-1 text-sm font-semibold text-secondary">
                 Ручной ввод всегда доступен, даже если поиск ничего не нашел.
               </p>
             </div>
@@ -165,29 +162,29 @@ export default function LibraryPage() {
       {loading ? (
         <LibrarySkeleton />
       ) : books.length > 0 ? (
-        <section className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+        <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5">
           {books.map((book) => (
-            <BookCard key={book.id} book={book} />
+            <BookCard key={book.id} book={book} variant="tile" />
           ))}
         </section>
       ) : hasFilters ? (
-        <section className="rounded-[18px] border border-border-soft bg-card p-8 text-center">
-          <h2 className="text-2xl font-bold text-primary">Ничего не найдено</h2>
-          <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-secondary">
+        <section className="quiet-panel rounded-[22px] p-8 text-center">
+          <h2 className="text-2xl font-black text-primary">Ничего не найдено</h2>
+          <p className="mx-auto mt-2 max-w-md text-sm font-semibold leading-6 text-secondary">
             На этой полке нет книг под выбранные фильтры.
           </p>
           <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
             <button
               type="button"
               onClick={resetFilters}
-              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-soft px-5 text-sm font-semibold text-primary"
+              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-soft px-5 text-sm font-black text-primary"
             >
               <IconX size={18} aria-hidden="true" />
               Сбросить фильтры
             </button>
             <a
               href="/library?add=1"
-              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-ink px-5 text-sm font-semibold text-[#f8f7f2]"
+              className="quiet-cta inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-5 text-sm font-black"
             >
               <IconPlus size={18} aria-hidden="true" />
               Добавить книгу
@@ -203,9 +200,9 @@ export default function LibraryPage() {
 
 function LibrarySkeleton() {
   return (
-    <section className="grid animate-pulse gap-3 md:grid-cols-2 xl:grid-cols-3">
+    <section className="grid animate-pulse gap-3 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5">
       {Array.from({ length: 6 }).map((_, index) => (
-        <div key={index} className="h-44 rounded-[14px] bg-card" />
+        <div key={index} className="h-[230px] rounded-[18px] bg-card" />
       ))}
     </section>
   );
