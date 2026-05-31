@@ -10,7 +10,8 @@ export function BookCover({ title, author, coverUrl }: BookCoverProps) {
 
   if (coverUrl) {
     return (
-      <div className="aspect-[2/3] overflow-hidden rounded-lg bg-soft shadow-[0_18px_34px_rgba(36,50,65,0.18)]">
+      <div className="aspect-[2/3] overflow-hidden rounded-lg bg-soft shadow-[0_18px_34px_rgba(36,50,65,0.18)] ring-1 ring-black/5">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={coverUrl}
           alt={alt}
@@ -23,7 +24,7 @@ export function BookCover({ title, author, coverUrl }: BookCoverProps) {
 
   return (
     <div
-      className="flex aspect-[2/3] flex-col justify-between rounded-lg border border-border-soft bg-lilac p-4 shadow-[0_18px_34px_rgba(36,50,65,0.14)]"
+      className="flex aspect-[2/3] flex-col justify-between rounded-lg border border-[#d9cee9] bg-[linear-gradient(145deg,#ede5ff_0%,#fffefa_100%)] p-4 shadow-[0_18px_34px_rgba(36,50,65,0.14)]"
       role="img"
       aria-label={`Нет обложки для книги ${title}`}
     >

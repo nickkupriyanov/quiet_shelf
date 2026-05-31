@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { IconArrowRight, IconCheck, IconPlus } from "@tabler/icons-react";
 
 import { BookCard } from "@/components/book-card";
@@ -19,15 +19,9 @@ export default function Home() {
   const continueBooks = books
     .filter((book) => book.status === "reading" && book.id !== activeBook?.id)
     .slice(0, 3);
-  const [pageInput, setPageInput] = useState("");
+  const [pageDraft, setPageDraft] = useState({ bookId: "", value: "" });
   const [pageError, setPageError] = useState("");
   const [saveMessage, setSaveMessage] = useState("");
-
-  useEffect(() => {
-    setPageInput(activeBook ? String(activeBook.currentPage) : "");
-    setPageError("");
-    setSaveMessage("");
-  }, [activeBook?.id, activeBook?.currentPage]);
 
   if (loading) {
     return <HomeSkeleton />;
@@ -40,6 +34,11 @@ export default function Home() {
       </div>
     );
   }
+
+  const pageInput =
+    pageDraft.bookId === activeBook.id
+      ? pageDraft.value
+      : String(activeBook.currentPage);
 
   const submitExactPage = async () => {
     const nextPage = Number(pageInput);
@@ -76,7 +75,7 @@ export default function Home() {
   };
 
   return (
-    <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_360px]">
+    <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_340px]">
       <div className="grid gap-4">
         <WeeklySummary
           pagesThisWeek={activeBook.currentPage}
@@ -84,7 +83,7 @@ export default function Home() {
           days={buildWeek(activeBook)}
         />
 
-        <section className="grid gap-5 rounded-[20px] border border-border-soft bg-card p-5 md:grid-cols-[210px_1fr]">
+        <section className="quiet-panel grid gap-6 overflow-hidden rounded-[20px] p-5 md:grid-cols-[230px_1fr] lg:p-6">
           <div className="mx-auto w-full max-w-[220px] md:max-w-none">
             <BookCover
               title={activeBook.title}
@@ -93,16 +92,16 @@ export default function Home() {
             />
           </div>
 
-          <div className="flex min-w-0 flex-col justify-between gap-8">
+          <div className="flex min-w-0 flex-col justify-between gap-7">
             <div>
-              <p className="text-sm font-medium text-secondary">Сейчас читаю</p>
-              <h1 className="mt-2 text-4xl font-bold leading-tight text-primary">
+              <p className="text-sm font-semibold text-secondary">Сейчас читаю</p>
+              <h1 className="mt-2 text-4xl font-bold leading-tight text-primary lg:text-5xl">
                 {activeBook.title}
               </h1>
               {activeBook.author ? (
                 <p className="mt-2 text-lg text-secondary">{activeBook.author}</p>
               ) : null}
-              <div className="mt-6 max-w-2xl">
+              <div className="mt-7 max-w-2xl">
                 <BookProgress
                   currentPage={activeBook.currentPage}
                   totalPages={activeBook.totalPages}
@@ -110,14 +109,17 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="grid gap-4 lg:grid-cols-[auto_minmax(220px,320px)] lg:items-end">
+            <div className="grid gap-4 lg:grid-cols-[minmax(260px,520px)_minmax(240px,320px)] lg:items-end">
               <button
                 type="button"
                 onClick={addTenPages}
-                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-ink px-6 text-base font-semibold text-[#f8f7f2] transition hover:-translate-y-0.5"
+                disabled={activeBook.currentPage >= activeBook.totalPages}
+                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-ink px-6 text-base font-semibold text-[#f8f7f2] shadow-[0_12px_26px_rgba(36,50,65,0.16)] transition hover:-translate-y-0.5 disabled:bg-soft disabled:text-secondary disabled:shadow-none"
               >
                 <IconPlus size={20} aria-hidden="true" />
-                +10 страниц
+                {activeBook.currentPage >= activeBook.totalPages
+                  ? "Страницы обновлены"
+                  : "+10 страниц"}
               </button>
 
               <div>
@@ -134,14 +136,19 @@ export default function Home() {
                     min={0}
                     max={activeBook.totalPages}
                     value={pageInput}
-                    onChange={(event) => setPageInput(event.target.value)}
+                    onChange={(event) =>
+                      setPageDraft({
+                        bookId: activeBook.id,
+                        value: event.target.value,
+                      })
+                    }
                     aria-describedby={pageError ? "current-page-error" : undefined}
-                    className="min-h-12 min-w-0 flex-1 rounded-full border border-border-soft bg-shell px-4 text-primary"
+                    className="min-h-12 min-w-0 flex-1 rounded-full border border-border-soft bg-shell px-4 text-primary shadow-inner"
                   />
                   <button
                     type="button"
                     onClick={submitExactPage}
-                    className="inline-flex min-h-12 items-center justify-center rounded-full bg-soft px-4 text-sm font-semibold text-primary"
+                    className="inline-flex min-h-12 items-center justify-center rounded-full bg-soft px-4 text-sm font-semibold text-primary transition hover:bg-mint"
                   >
                     Обновить
                   </button>
@@ -158,7 +165,7 @@ export default function Home() {
               <button
                 type="button"
                 onClick={finishBook}
-                className="inline-flex min-h-11 w-fit items-center justify-center gap-2 rounded-full bg-gold px-5 text-sm font-semibold text-primary"
+                className="inline-flex min-h-11 w-fit items-center justify-center gap-2 rounded-full bg-gold px-5 text-sm font-semibold text-primary shadow-sm"
               >
                 <IconCheck size={18} aria-hidden="true" />
                 Завершить книгу
@@ -176,7 +183,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="rounded-[18px] border border-border-soft bg-card p-5">
+        <section className="quiet-panel rounded-[18px] p-5">
           <div className="mb-4 flex items-center justify-between gap-4">
             <div>
               <h2 className="text-2xl font-bold text-primary">Продолжить полку</h2>
@@ -186,7 +193,7 @@ export default function Home() {
             </div>
             <a
               href="/library"
-              className="hidden items-center gap-2 rounded-full bg-soft px-4 py-2 text-sm font-semibold text-primary sm:inline-flex"
+              className="hidden items-center gap-2 rounded-full bg-soft px-4 py-2 text-sm font-semibold text-primary transition hover:bg-mint sm:inline-flex"
             >
               Библиотека
               <IconArrowRight size={16} aria-hidden="true" />
@@ -238,7 +245,7 @@ function ReaderSummary({ books }: { books: Book[] }) {
   const finishedCount = books.filter((book) => book.status === "finished").length;
 
   return (
-    <section className="rounded-[18px] border border-border-soft bg-peach p-5">
+    <section className="rounded-[18px] border border-[#f2d2b3] bg-peach p-5 shadow-[0_14px_36px_rgba(36,50,65,0.06)]">
       <h2 className="text-xl font-bold text-primary">Профиль</h2>
       <div className="mt-5 grid grid-cols-2 gap-3">
         <Metric label="На полке" value={books.length} />
@@ -260,7 +267,7 @@ function FocusCard({
   const remaining = activeBook.totalPages - activeBook.currentPage;
 
   return (
-    <section className="rounded-[18px] border border-border-soft bg-lilac p-5">
+    <section className="rounded-[18px] border border-[#d9cee9] bg-lilac p-5 shadow-[0_14px_36px_rgba(36,50,65,0.06)]">
       <p className="text-sm font-semibold text-secondary">Сегодня</p>
       <h2 className="mt-2 text-2xl font-bold leading-tight text-primary">Фокус</h2>
       <p className="mt-3 text-sm leading-6 text-secondary">
@@ -269,10 +276,11 @@ function FocusCard({
       <button
         type="button"
         onClick={onAddTen}
-        className="mt-5 inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-ink px-5 text-sm font-semibold text-[#f8f7f2]"
+        disabled={activeBook.currentPage >= activeBook.totalPages}
+        className="mt-5 inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-ink px-5 text-sm font-semibold text-[#f8f7f2] shadow-[0_10px_22px_rgba(36,50,65,0.14)] disabled:bg-card disabled:text-secondary disabled:shadow-none"
       >
         <IconPlus size={18} aria-hidden="true" />
-        +10 страниц
+        {activeBook.currentPage >= activeBook.totalPages ? "Готово" : "+10 страниц"}
       </button>
     </section>
   );
@@ -280,7 +288,7 @@ function FocusCard({
 
 function Metric({ label, value }: { label: string; value: number }) {
   return (
-    <div className="rounded-[14px] bg-card p-4">
+    <div className="rounded-[14px] bg-card p-4 shadow-sm">
       <p className="font-mono text-2xl font-semibold text-primary">{value}</p>
       <p className="mt-1 text-sm text-secondary">{label}</p>
     </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import {
   applyProgressUpdate,
@@ -25,31 +25,33 @@ const repository = new DexieBookRepository();
 
 export function useBooks(initialQuery: BookQuery = {}): UseBooksResult {
   const [books, setBooks] = useState<Book[]>([]);
-  const [query, setQuery] = useState<BookQuery>(initialQuery);
+  const queryRef = useRef<BookQuery>(initialQuery);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string>();
 
-  const refreshBooks = useCallback(
-    async (nextQuery?: BookQuery) => {
-      const activeQuery = nextQuery ?? query;
-      setLoading(true);
-      setError(undefined);
+  const refreshBooks = useCallback(async (nextQuery?: BookQuery) => {
+    const activeQuery = nextQuery ?? queryRef.current;
+    queryRef.current = activeQuery;
+    setLoading(true);
+    setError(undefined);
 
-      try {
-        const nextBooks = await repository.listBooks(activeQuery);
-        setBooks(nextBooks);
-        setQuery(activeQuery);
-      } catch {
-        setError("Не удалось загрузить локальную полку.");
-      } finally {
-        setLoading(false);
-      }
-    },
-    [query],
-  );
+    try {
+      const nextBooks = await repository.listBooks(activeQuery);
+      setBooks(nextBooks);
+    } catch {
+      setError("Не удалось загрузить локальную полку.");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
-    void refreshBooks(initialQuery);
+    queueMicrotask(() => {
+      void refreshBooks(initialQuery);
+    });
+    // The hook intentionally performs one initial local IndexedDB read.
+    // Subsequent query changes are driven by refreshBooks from callers.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const actions = useMemo(

@@ -22,7 +22,11 @@ export function BookProgress({
         </span>
       </div>
       <div
-        className={compact ? "h-2 rounded-full bg-soft" : "h-3 rounded-full bg-soft"}
+        className={
+          compact
+            ? "h-2 rounded-full bg-soft shadow-inner"
+            : "h-3 rounded-full bg-soft shadow-inner"
+        }
         role="progressbar"
         aria-valuemin={0}
         aria-valuemax={100}
@@ -30,7 +34,7 @@ export function BookProgress({
         aria-label={`Прогресс чтения ${percent}%`}
       >
         <div
-          className="h-full rounded-full bg-sage transition-[width]"
+          className="h-full rounded-full bg-sage transition-[width] shadow-[inset_0_0_0_1px_rgba(36,50,65,0.05)]"
           style={{ width: `${percent}%` }}
         />
       </div>

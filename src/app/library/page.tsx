@@ -34,18 +34,16 @@ export default function LibraryPage() {
   const [sort, setSort] = useState<BookSort>("recently_updated");
   const query = useMemo(() => ({ search, status, sort }), [search, status, sort]);
   const { books, loading, error, createBook, refreshBooks } = useBooks(query);
-  const [showForm, setShowForm] = useState(false);
+  const [showForm, setShowForm] = useState(
+    () => typeof window !== "undefined" && window.location.search.includes("add=1"),
+  );
   const hasFilters = search.trim() !== "" || status !== "all";
 
   useEffect(() => {
-    void refreshBooks(query);
-  }, [query]);
-
-  useEffect(() => {
-    if (window.location.search.includes("add=1")) {
-      setShowForm(true);
-    }
-  }, []);
+    queueMicrotask(() => {
+      void refreshBooks(query);
+    });
+  }, [query, refreshBooks]);
 
   const resetFilters = () => {
     setSearch("");

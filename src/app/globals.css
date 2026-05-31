@@ -40,27 +40,6 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --surface-page: #171b22;
-    --surface-shell: #22262d;
-    --surface-card: #2b3038;
-    --surface-soft: #313742;
-    --text-primary: #f4f1ea;
-    --text-secondary: #c7c2b8;
-    --text-muted: #969da5;
-    --border-soft: #3c434c;
-    --accent-ink: #f4f1ea;
-    --accent-sage: #9ab28f;
-    --accent-mint: #314438;
-    --accent-lilac: #38324d;
-    --accent-lavender: #9d8ad7;
-    --accent-peach: #4d3a2c;
-    --accent-rose: #50363b;
-    --accent-gold: #d8b969;
-  }
-}
-
 * {
   box-sizing: border-box;
 }
@@ -75,6 +54,11 @@ body {
   background: var(--surface-page);
   color: var(--text-primary);
   font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+}
+
+::selection {
+  background: var(--accent-mint);
+  color: var(--text-primary);
 }
 
 a {
@@ -97,6 +81,12 @@ textarea {
   background: var(--surface-shell);
   padding: 0 1rem;
   color: var(--text-primary);
+}
+
+.quiet-panel {
+  border: 1px solid var(--border-soft);
+  background: color-mix(in srgb, var(--surface-card), white 38%);
+  box-shadow: 0 18px 50px rgba(36, 50, 65, 0.07);
 }
 
 button:focus-visible,
