@@ -6,6 +6,8 @@ import {
   applyProgressUpdate,
   type Book,
   type CreateBookInput,
+  type ProgressEntry,
+  type StatusHistoryEntry,
 } from "@/domain/books";
 import type { BookQuery } from "@/domain/repository";
 import { DexieBookRepository } from "@/persistence/dexie-book-repository";
@@ -18,6 +20,8 @@ type UseBooksResult = {
   updateBook: (book: Book) => Promise<Book | undefined>;
   deleteBook: (bookId: string) => Promise<void>;
   updateProgress: (book: Book, page: number) => Promise<Book | undefined>;
+  listProgressEntries: (bookId: string) => Promise<ProgressEntry[]>;
+  listStatusHistoryEntries: (bookId: string) => Promise<StatusHistoryEntry[]>;
   refreshBooks: (nextQuery?: BookQuery) => Promise<void>;
 };
 
@@ -127,6 +131,26 @@ export function useBooks(initialQuery: BookQuery = {}): UseBooksResult {
         } catch {
           setError("Не удалось обновить прогресс.");
           return undefined;
+        }
+      },
+      listProgressEntries: async (bookId: string) => {
+        setError(undefined);
+
+        try {
+          return await repository.listProgressEntries(bookId);
+        } catch {
+          setError("Не удалось загрузить историю прогресса.");
+          return [];
+        }
+      },
+      listStatusHistoryEntries: async (bookId: string) => {
+        setError(undefined);
+
+        try {
+          return await repository.listStatusHistoryEntries(bookId);
+        } catch {
+          setError("Не удалось загрузить историю статусов.");
+          return [];
         }
       },
     }),

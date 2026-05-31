@@ -22,8 +22,8 @@ const desktopNavItems = [
 export function AppShell({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-dvh p-2 text-primary sm:p-[18px]">
-      <div className="quiet-gradient-panel mx-auto flex min-h-[calc(100dvh-1rem)] w-full max-w-[1680px] flex-col overflow-hidden rounded-[24px] sm:min-h-[calc(100dvh-36px)]">
-        <header className="grid grid-cols-[auto_1fr_auto] items-center gap-4 px-4 py-3 sm:px-[18px]">
+      {/*<div className="quiet-gradient-panel mx-auto flex min-h-[calc(100dvh-1rem)] w-full flex-col overflow-hidden rounded-[24px] sm:min-h-[calc(100dvh-36px)]">*/}
+        <header className="grid grid-cols-[auto_1fr_auto] items-center gap-4 px-4 py-3 sm:px-4.5">
           <Link
             href="/"
             className="flex min-h-10 items-center rounded-full px-2 font-mono text-sm font-black text-primary"
@@ -71,7 +71,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             </Link>
           ))}
         </nav>
-      </div>
+      {/*</div>*/}
     </div>
   );
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import {
   IconArrowRight,
@@ -62,7 +63,9 @@ export default function Home() {
       ? pageDraft.value
       : String(activeBook.currentPage);
   const canAddPages = activeBook.currentPage < activeBook.totalPages;
-  const finishedCount = books.filter((book) => book.status === "finished").length;
+  const finishedCount = books.filter(
+    (book) => book.status === "finished",
+  ).length;
   const readingCount = books.filter((book) => book.status === "reading").length;
   const pagesTotal = books.reduce((sum, book) => sum + book.currentPage, 0);
 
@@ -90,7 +93,10 @@ export default function Home() {
       return;
     }
 
-    const updated = await updateProgress(activeBook, activeBook.currentPage + 10);
+    const updated = await updateProgress(
+      activeBook,
+      activeBook.currentPage + 10,
+    );
     if (updated) {
       setSaveMessage("Добавлено 10 страниц.");
     }
@@ -175,7 +181,9 @@ export default function Home() {
                       value: event.target.value,
                     })
                   }
-                  aria-describedby={pageError ? "current-page-error" : undefined}
+                  aria-describedby={
+                    pageError ? "current-page-error" : undefined
+                  }
                   className="min-h-10 min-w-[120px] flex-1 rounded-full border border-border-soft bg-card px-4 text-primary"
                 />
                 <button
@@ -200,7 +208,10 @@ export default function Home() {
             ) : null}
 
             {pageError ? (
-              <p id="current-page-error" className="mt-3 text-sm font-semibold text-[#9f2f3a]">
+              <p
+                id="current-page-error"
+                className="mt-3 text-sm font-semibold text-[#9f2f3a]"
+              >
                 {pageError}
               </p>
             ) : null}
@@ -312,14 +323,27 @@ function ReaderSummary({
   pagesTotal: number;
 }) {
   return (
-    <section className="quiet-panel rounded-[22px] p-4">
+    <section
+      className="quiet-panel rounded-[22px] bg-cover bg-center p-4"
+      style={{
+        backgroundImage:
+          "linear-gradient(90deg, rgba(255, 254, 250, 0.94), rgba(253, 253, 253, 0.65)), url('/profile-background.png')",
+        backgroundPosition: "right",
+        backgroundSize: "contain",
+        backgroundRepeat: "no-repeat",
+      }}
+    >
       <div className="grid grid-cols-[46px_minmax(0,1fr)] items-center gap-3">
-        <span className="grid h-11 w-11 place-items-center rounded-full bg-peach font-mono text-sm font-black text-primary">
+        <span className="grid h-11 w-11 place-items-center rounded-full bg-peach/90 font-mono text-sm font-black text-primary shadow-[0_8px_18px_rgba(87,66,45,0.08)]">
           QS
         </span>
         <div>
-          <h2 className="text-2xl font-black leading-tight text-primary">Профиль</h2>
-          <p className="text-sm font-semibold text-secondary">Локальная полка</p>
+          <h2 className="text-2xl font-black leading-tight text-primary">
+            Профиль
+          </h2>
+          <p className="text-sm font-semibold text-secondary">
+            Локальная полка
+          </p>
         </div>
       </div>
       <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4 xl:grid-cols-2 2xl:grid-cols-4">
@@ -419,8 +443,12 @@ function InsightWidget({
       <div className="mt-4 grid flex-1 content-start gap-3 rounded-[20px] bg-[radial-gradient(circle_at_88%_86%,rgba(190,218,165,0.92),transparent_34%),linear-gradient(135deg,#263544,#172330)] p-4 text-[#fffefa]">
         {tab === "today" ? (
           <>
-            <p className="text-sm font-semibold text-white/70">Активная книга</p>
-            <h3 className="text-2xl font-black leading-tight">{activeBook.title}</h3>
+            <p className="text-sm font-semibold text-white/70">
+              Активная книга
+            </p>
+            <h3 className="text-2xl font-black leading-tight">
+              {activeBook.title}
+            </h3>
             <p className="text-sm leading-6 text-white/76">
               До конца осталось {remaining} стр. Самое быстрое действие рядом.
             </p>
@@ -493,7 +521,7 @@ function InsightWidget({
 
 function Metric({ label, value }: { label: string; value: number }) {
   return (
-    <div className="min-h-[60px] rounded-[16px] bg-card p-3">
+    <div className="min-h-[60px] rounded-[16px] border border-white/55 p-3 shadow-[0_8px_18px_rgba(87,66,45,0.06)]">
       <p className="font-mono text-2xl font-black leading-none text-primary">
         {value}
       </p>
