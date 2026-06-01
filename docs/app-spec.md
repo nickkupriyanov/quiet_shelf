@@ -22,7 +22,7 @@ Required behavior:
 - Show cover, title, author, current page, total pages, and progress.
 - Provide quick actions: `+10 страниц` and `Обновить`.
 - Show weekly reading summary, current streak, and a small continue shelf.
-- Show a right-side insight widget with four manual tabs: `Сегодня`, `Неделя`, `История`, and `Финиш`.
+- Show a right-side insight widget carousel with four slides: `Сегодня`, `Неделя`, `История`, and `Финиш`.
 - If no books exist, show an empty shelf state with a primary `Добавить книгу` action.
 
 ### Library
@@ -69,13 +69,14 @@ Purpose: keep the right side useful without adding social features or dead place
 
 Required behavior:
 
-- Use manual tabs, not auto-rotating carousel behavior.
-- Default tab is `Сегодня`.
+- Use an auto-rotating carousel with a 20-second interval per slide.
+- Default slide is `Сегодня`.
+- Show one dot per slide at the bottom of the widget and highlight the active dot.
 - `Сегодня` prompts the user to update the active book and repeats the safest quick actions.
 - `Неделя` shows pages read, current streak, and finished count.
 - `История` summarizes recent progress entries and status changes.
 - `Финиш` shows remaining pages for unfinished books, or rating, tags, finish date, and status history for finished books.
-- The widget keeps a stable size across tabs on desktop and appears after the profile summary on mobile.
+- The widget keeps a stable size across slides on desktop and appears after the profile summary on mobile.
 
 ## Data And Interfaces
 

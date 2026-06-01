@@ -79,7 +79,7 @@ Rules:
 - Brand in the shell is `QuietShelf`.
 - Use the soft product dashboard direction from `docs/ui-spec.md`: milk-white shell, graphite actions, pastel modules, sage progress, and no muddy olive-dominant surfaces.
 - Do not use future social nav items or placeholder screens.
-- The insight widget uses manual tabs: `Сегодня`, `Неделя`, `История`, `Финиш`. Do not auto-rotate it.
+- The insight widget uses an auto-rotating carousel with slides: `Сегодня`, `Неделя`, `История`, `Финиш`. Rotate every 20 seconds and show highlighted dots at the bottom.
 - This file is a design artifact, not production UI.
 
 - [ ] **Step 2: Review before app implementation**
@@ -89,7 +89,7 @@ Open `docs/mockups/quietshelf-mvp.html` in a browser and review:
 - The active book is the strongest visual object.
 - `+10 страниц` is easy to reach.
 - The dashboard uses the full viewport width harmoniously on desktop.
-- The insight widget remains useful and stable across all four tabs.
+- The insight widget remains useful and stable across all four slides.
 - Mobile order is `Ритм`, active book, profile summary, `Фокус`, then shelf.
 - Mobile bottom navigation does not obscure interactive content.
 - Library feels shelf-like without literal clutter.

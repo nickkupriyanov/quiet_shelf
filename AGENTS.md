@@ -158,6 +158,7 @@ When implementation begins, cover:
 ## Development Notes
 
 - Follow `docs/implementation-plan.md` when implementing the MVP.
+- Keep UI components in separate files: one component per file for new components and touched components, unless a tiny private helper is not a component.
 - Prefer small, well-bounded modules over large files.
 - Use existing project patterns once the app is scaffolded.
 - Do not add unrelated refactors while implementing a feature.

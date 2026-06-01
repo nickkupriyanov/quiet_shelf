@@ -32,10 +32,14 @@ export default function LibraryPage() {
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState<StatusFilter>("all");
   const [sort, setSort] = useState<BookSort>("recently_updated");
-  const query = useMemo(() => ({ search, status, sort }), [search, status, sort]);
+  const query = useMemo(
+    () => ({ search, status, sort }),
+    [search, status, sort],
+  );
   const { books, loading, error, createBook, refreshBooks } = useBooks(query);
   const [showForm, setShowForm] = useState(
-    () => typeof window !== "undefined" && window.location.search.includes("add=1"),
+    () =>
+      typeof window !== "undefined" && window.location.search.includes("add=1"),
   );
   const hasFilters = search.trim() !== "" || status !== "all";
 
@@ -56,7 +60,9 @@ export default function LibraryPage() {
       <section className="quiet-panel min-w-0 rounded-[22px] p-4">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <p className="font-mono text-sm font-bold text-secondary">Библиотека</p>
+            <p className="font-mono text-sm font-bold text-secondary">
+              Библиотека
+            </p>
             <h1 className="mt-2 text-[clamp(34px,4vw,52px)] font-black leading-none tracking-normal text-primary">
               Личная полка
             </h1>
@@ -73,7 +79,10 @@ export default function LibraryPage() {
 
         <div className="mt-5 grid min-w-0 gap-3 xl:grid-cols-[minmax(220px,1fr)_auto_240px] xl:items-end">
           <div>
-            <label htmlFor="library-search" className="mb-2 block text-sm font-bold text-secondary">
+            <label
+              htmlFor="library-search"
+              className="mb-2 block text-sm font-bold text-secondary"
+            >
               Поиск
             </label>
             <div className="flex min-h-10 items-center gap-2 rounded-[14px] border border-border-soft bg-card px-3">
@@ -119,7 +128,10 @@ export default function LibraryPage() {
       </section>
 
       {error ? (
-        <p className="rounded-[14px] bg-rose p-4 text-sm font-medium text-primary" role="alert">
+        <p
+          className="rounded-[14px] bg-rose p-4 text-sm font-medium text-primary"
+          role="alert"
+        >
           {error}
         </p>
       ) : null}
@@ -128,7 +140,9 @@ export default function LibraryPage() {
         <section className="quiet-panel min-w-0 rounded-[22px] p-5">
           <div className="mb-5 flex items-start justify-between gap-4">
             <div>
-              <h2 className="text-2xl font-black text-primary">Добавить книгу</h2>
+              <h2 className="text-2xl font-black text-primary">
+                Добавить книгу
+              </h2>
               <p className="mt-1 text-sm font-semibold text-secondary">
                 Ручной ввод всегда доступен, даже если поиск ничего не нашел.
               </p>
@@ -169,7 +183,9 @@ export default function LibraryPage() {
         </section>
       ) : hasFilters ? (
         <section className="quiet-panel rounded-[22px] p-8 text-center">
-          <h2 className="text-2xl font-black text-primary">Ничего не найдено</h2>
+          <h2 className="text-2xl font-black text-primary">
+            Ничего не найдено
+          </h2>
           <p className="mx-auto mt-2 max-w-md text-sm font-semibold leading-6 text-secondary">
             На этой полке нет книг под выбранные фильтры.
           </p>

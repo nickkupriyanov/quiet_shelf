@@ -39,7 +39,9 @@ const statusOptions: { value: ReadingStatus; label: string }[] = [
 
 export default function BookDetailPage() {
   const params = useParams<{ bookId: string }>();
-  const bookId = Array.isArray(params.bookId) ? params.bookId[0] : params.bookId;
+  const bookId = Array.isArray(params.bookId)
+    ? params.bookId[0]
+    : params.bookId;
   const {
     books,
     loading,
@@ -149,7 +151,11 @@ export default function BookDetailPage() {
   const submitExactPage = async () => {
     const nextPage = Number(pageValue);
 
-    if (!Number.isInteger(nextPage) || nextPage < 0 || nextPage > book.totalPages) {
+    if (
+      !Number.isInteger(nextPage) ||
+      nextPage < 0 ||
+      nextPage > book.totalPages
+    ) {
       setPageError(`Введите страницу от 0 до ${book.totalPages}.`);
       return;
     }
@@ -199,7 +205,7 @@ export default function BookDetailPage() {
         .filter(Boolean),
       finishedAt:
         statusValue === "finished"
-          ? book.finishedAt ?? new Date().toISOString()
+          ? (book.finishedAt ?? new Date().toISOString())
           : book.finishedAt,
     });
 
@@ -301,7 +307,10 @@ export default function BookDetailPage() {
           ) : null}
 
           {pageError ? (
-            <p id="detail-page-error" className="mt-3 text-sm font-semibold text-[#9f2f3a]">
+            <p
+              id="detail-page-error"
+              className="mt-3 text-sm font-semibold text-[#9f2f3a]"
+            >
               {pageError}
             </p>
           ) : null}
@@ -374,7 +383,10 @@ export default function BookDetailPage() {
             </Field>
           </div>
           {formError ? (
-            <p className="mt-3 text-sm font-semibold text-[#9f2f3a]" role="alert">
+            <p
+              className="mt-3 text-sm font-semibold text-[#9f2f3a]"
+              role="alert"
+            >
               {formError}
             </p>
           ) : null}
@@ -450,7 +462,10 @@ function Field({
 }) {
   return (
     <div>
-      <label htmlFor={htmlFor} className="mb-2 block text-sm font-bold text-secondary">
+      <label
+        htmlFor={htmlFor}
+        className="mb-2 block text-sm font-bold text-secondary"
+      >
         {label}
       </label>
       {children}
@@ -463,10 +478,15 @@ function BookFacts({ book }: { book: Book }) {
     <section className="quiet-panel rounded-[22px] p-5">
       <h2 className="text-2xl font-black text-primary">Сводка</h2>
       <div className="mt-4 grid gap-3">
-        <Fact label="Страницы" value={`${book.currentPage} из ${book.totalPages}`} />
+        <Fact
+          label="Страницы"
+          value={`${book.currentPage} из ${book.totalPages}`}
+        />
         <Fact label="Создано" value={formatDate(book.createdAt)} />
         <Fact label="Обновлено" value={formatDate(book.updatedAt)} />
-        {book.startedAt ? <Fact label="Начато" value={formatDate(book.startedAt)} /> : null}
+        {book.startedAt ? (
+          <Fact label="Начато" value={formatDate(book.startedAt)} />
+        ) : null}
         {book.finishedAt ? (
           <Fact label="Завершено" value={formatDate(book.finishedAt)} />
         ) : null}
@@ -503,7 +523,9 @@ function Fact({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-center justify-between gap-3 rounded-[14px] bg-soft px-4 py-3">
       <span className="text-sm font-bold text-secondary">{label}</span>
-      <span className="text-right text-sm font-black text-primary">{value}</span>
+      <span className="text-right text-sm font-black text-primary">
+        {value}
+      </span>
     </div>
   );
 }

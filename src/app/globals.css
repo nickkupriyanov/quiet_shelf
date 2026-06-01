@@ -1,110 +1,115 @@
 @import "tailwindcss";
 
 :root {
-  --surface-page: #f2f1fb;
-  --surface-shell: #f8f7f2;
-  --surface-card: #fffefa;
-  --surface-soft: #f2efe8;
-  --text-primary: #1d2730;
-  --text-secondary: #65707a;
-  --text-muted: #8b96a1;
-  --border-soft: #e7e2da;
-  --accent-ink: #243241;
-  --accent-sage: #7d9b77;
-  --accent-mint: #dff3db;
-  --accent-lilac: #ede5ff;
-  --accent-lavender: #c9b8ff;
-  --accent-peach: #ffe3c5;
-  --accent-rose: #f2c8ca;
-  --accent-gold: #f0c66e;
+    --surface-page: #f2f1fb;
+    --surface-shell: #f8f7f2;
+    --surface-card: #fffefa;
+    --surface-soft: #f2efe8;
+    --text-primary: #1d2730;
+    --text-secondary: #65707a;
+    --text-muted: #8b96a1;
+    --border-soft: #e7e2da;
+    --accent-ink: #243241;
+    --accent-sage: #7d9b77;
+    --accent-mint: #dff3db;
+    --accent-lilac: #ede5ff;
+    --accent-lavender: #c9b8ff;
+    --accent-peach: #ffe3c5;
+    --accent-rose: #f2c8ca;
+    --accent-gold: #f0c66e;
 }
 
 @theme inline {
-  --color-page: var(--surface-page);
-  --color-shell: var(--surface-shell);
-  --color-card: var(--surface-card);
-  --color-soft: var(--surface-soft);
-  --color-primary: var(--text-primary);
-  --color-secondary: var(--text-secondary);
-  --color-muted: var(--text-muted);
-  --color-border-soft: var(--border-soft);
-  --color-ink: var(--accent-ink);
-  --color-sage: var(--accent-sage);
-  --color-mint: var(--accent-mint);
-  --color-lilac: var(--accent-lilac);
-  --color-lavender: var(--accent-lavender);
-  --color-peach: var(--accent-peach);
-  --color-rose: var(--accent-rose);
-  --color-gold: var(--accent-gold);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+    --color-page: var(--surface-page);
+    --color-shell: var(--surface-shell);
+    --color-card: var(--surface-card);
+    --color-soft: var(--surface-soft);
+    --color-primary: var(--text-primary);
+    --color-secondary: var(--text-secondary);
+    --color-muted: var(--text-muted);
+    --color-border-soft: var(--border-soft);
+    --color-ink: var(--accent-ink);
+    --color-sage: var(--accent-sage);
+    --color-mint: var(--accent-mint);
+    --color-lilac: var(--accent-lilac);
+    --color-lavender: var(--accent-lavender);
+    --color-peach: var(--accent-peach);
+    --color-rose: var(--accent-rose);
+    --color-gold: var(--accent-gold);
+    --font-sans: var(--font-geist-sans);
+    --font-mono: var(--font-geist-mono);
 }
 
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 html {
-  min-height: 100%;
+    min-height: 100%;
 }
 
 body {
-  min-height: 100%;
-  margin: 0;
-  color: var(--text-primary);
-  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+    min-height: 100%;
+    margin: 0;
+    color: var(--text-primary);
+    font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
 }
 
 ::selection {
-  background: var(--accent-mint);
-  color: var(--text-primary);
+    background: var(--accent-mint);
+    color: var(--text-primary);
 }
 
 a {
-  text-decoration: none;
+    text-decoration: none;
 }
 
 button,
 input,
 select,
 textarea {
-  font: inherit;
+    font: inherit;
 }
 
 .form-input {
-  min-height: 2.75rem;
-  min-width: 0;
-  width: 100%;
-  border-radius: 999px;
-  border: 1px solid var(--border-soft);
-  background: var(--surface-shell);
-  padding: 0 1rem;
-  color: var(--text-primary);
+    min-height: 2.75rem;
+    min-width: 0;
+    width: 100%;
+    border-radius: 999px;
+    border: 1px solid var(--border-soft);
+    background: var(--surface-shell);
+    padding: 0 1rem;
+    color: var(--text-primary);
 }
 
 .quiet-panel {
-  background: rgba(255, 254, 250, 0.94);
-  box-shadow: 0 14px 34px rgba(33, 42, 53, 0.08);
+    border: 1px solid #7d9b7724;
+    background: rgba(255, 254, 250, 0.94);
+    box-shadow: 0 14px 34px rgba(33, 42, 53, 0.08);
 }
 
 .quiet-gradient-panel {
-  border: 1px solid rgba(255, 255, 255, 0.72);
-  background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(247, 243, 255, 0.84)),
-    var(--surface-shell);
-  box-shadow: 0 34px 95px rgba(20, 28, 40, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.72);
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.9),
+            rgba(247, 243, 255, 0.84)
+        ),
+        var(--surface-shell);
+    box-shadow: 0 34px 95px rgba(20, 28, 40, 0.3);
 }
 
 .quiet-cta {
-  background: var(--accent-ink);
-  color: #fffefa;
-  box-shadow: 0 12px 24px rgba(36, 50, 65, 0.16);
+    background: var(--accent-ink);
+    color: #fffefa;
+    box-shadow: 0 12px 24px rgba(36, 50, 65, 0.16);
 }
 
 .quiet-cta:disabled {
-  background: var(--surface-soft);
-  color: var(--text-secondary);
-  box-shadow: none;
+    background: var(--surface-soft);
+    color: var(--text-secondary);
+    box-shadow: none;
 }
 
 button:focus-visible,
@@ -112,17 +117,17 @@ a:focus-visible,
 input:focus-visible,
 select:focus-visible,
 textarea:focus-visible {
-  outline: 3px solid color-mix(in srgb, var(--accent-sage), white 18%);
-  outline-offset: 3px;
+    outline: 3px solid color-mix(in srgb, var(--accent-sage), white 18%);
+    outline-offset: 3px;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    scroll-behavior: auto !important;
-    transition-duration: 0.01ms !important;
-  }
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+    }
 }

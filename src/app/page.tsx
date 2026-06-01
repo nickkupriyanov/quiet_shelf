@@ -1,31 +1,22 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import {
   IconArrowRight,
   IconBook2,
   IconCheck,
   IconPlus,
-  IconTrendingUp,
 } from "@tabler/icons-react";
 
 import { BookCard } from "@/components/book-card";
 import { BookCover } from "@/components/book-cover";
 import { BookProgress } from "@/components/book-progress";
+import { DailyQuote } from "@/components/daily-quote";
 import { EmptyState } from "@/components/empty-state";
+import { InsightWidget } from "@/components/insight-widget";
 import { WeeklySummary } from "@/components/weekly-summary";
 import { shouldSuggestFinish, type Book } from "@/domain/books";
 import { useBooks } from "@/hooks/use-books";
-
-type InsightTab = "today" | "week" | "history" | "finish";
-
-const insightTabs: { value: InsightTab; label: string }[] = [
-  { value: "today", label: "Сегодня" },
-  { value: "week", label: "Неделя" },
-  { value: "history", label: "История" },
-  { value: "finish", label: "Финиш" },
-];
 
 export default function Home() {
   const query = useMemo(() => ({ sort: "recently_updated" as const }), []);
@@ -38,7 +29,6 @@ export default function Home() {
   const [pageDraft, setPageDraft] = useState({ bookId: "", value: "" });
   const [pageError, setPageError] = useState("");
   const [saveMessage, setSaveMessage] = useState("");
-  const [insightTab, setInsightTab] = useState<InsightTab>("today");
 
   useEffect(() => {
     queueMicrotask(() => {
@@ -271,10 +261,12 @@ export default function Home() {
           finishedCount={finishedCount}
           pagesTotal={pagesTotal}
         />
-        <QuickActions onAddTen={addTenPages} canAddPages={canAddPages} />
+        <DailyQuote
+          quote="Все счастливые семьи похожи друг на друга."
+          bookTitle="Анна Каренина"
+          author="Лев Толстой"
+        />
         <InsightWidget
-          tab={insightTab}
-          onTabChange={setInsightTab}
           activeBook={activeBook}
           pagesTotal={pagesTotal}
           finishedCount={finishedCount}
@@ -356,169 +348,6 @@ function ReaderSummary({
   );
 }
 
-function QuickActions({
-  onAddTen,
-  canAddPages,
-}: {
-  onAddTen: () => void;
-  canAddPages: boolean;
-}) {
-  return (
-    <section className="quiet-panel grid grid-cols-2 gap-2 rounded-[22px] p-2">
-      <button
-        type="button"
-        onClick={onAddTen}
-        disabled={!canAddPages}
-        className="quiet-cta min-h-12 rounded-full px-4 text-sm font-black"
-      >
-        +10 страниц
-      </button>
-      <a
-        href="/library?add=1"
-        className="grid min-h-12 place-items-center rounded-full border border-border-soft bg-card px-4 text-sm font-black text-ink"
-      >
-        Добавить
-      </a>
-    </section>
-  );
-}
-
-function InsightWidget({
-  tab,
-  onTabChange,
-  activeBook,
-  pagesTotal,
-  finishedCount,
-  readingCount,
-  onAddTen,
-  canAddPages,
-}: {
-  tab: InsightTab;
-  onTabChange: (tab: InsightTab) => void;
-  activeBook: Book;
-  pagesTotal: number;
-  finishedCount: number;
-  readingCount: number;
-  onAddTen: () => void;
-  canAddPages: boolean;
-}) {
-  const remaining = Math.max(activeBook.totalPages - activeBook.currentPage, 0);
-
-  return (
-    <section className="quiet-panel flex min-h-[360px] flex-col rounded-[22px] p-4">
-      <div className="flex items-start justify-between gap-3">
-        <div>
-          <p className="text-sm font-bold text-secondary">Сегодня</p>
-          <h2 className="mt-1 text-2xl font-black leading-tight text-primary">
-            Фокус
-          </h2>
-        </div>
-        <IconTrendingUp size={22} className="text-sage" aria-hidden="true" />
-      </div>
-
-      <div
-        className="mt-4 grid grid-cols-4 gap-1 rounded-full border border-border-soft bg-soft p-1"
-        role="tablist"
-        aria-label="Режимы блока Фокус"
-      >
-        {insightTabs.map((item) => (
-          <button
-            key={item.value}
-            type="button"
-            role="tab"
-            aria-selected={tab === item.value}
-            onClick={() => onTabChange(item.value)}
-            className={[
-              "min-h-9 rounded-full px-2 text-xs font-black transition",
-              tab === item.value
-                ? "bg-ink text-[#fffefa]"
-                : "text-secondary hover:bg-card",
-            ].join(" ")}
-          >
-            {item.label}
-          </button>
-        ))}
-      </div>
-
-      <div className="mt-4 grid flex-1 content-start gap-3 rounded-[20px] bg-[radial-gradient(circle_at_88%_86%,rgba(190,218,165,0.92),transparent_34%),linear-gradient(135deg,#263544,#172330)] p-4 text-[#fffefa]">
-        {tab === "today" ? (
-          <>
-            <p className="text-sm font-semibold text-white/70">
-              Активная книга
-            </p>
-            <h3 className="text-2xl font-black leading-tight">
-              {activeBook.title}
-            </h3>
-            <p className="text-sm leading-6 text-white/76">
-              До конца осталось {remaining} стр. Самое быстрое действие рядом.
-            </p>
-            <button
-              type="button"
-              onClick={onAddTen}
-              disabled={!canAddPages}
-              className="mt-1 inline-flex min-h-10 w-fit items-center justify-center rounded-full bg-[#fffefa] px-5 text-sm font-black text-ink disabled:bg-white/18 disabled:text-white/60"
-            >
-              {canAddPages ? "+10 страниц" : "Готово"}
-            </button>
-          </>
-        ) : null}
-
-        {tab === "week" ? (
-          <>
-            <h3 className="text-2xl font-black leading-tight">Неделя</h3>
-            <div className="grid grid-cols-3 gap-2">
-              <InsightMetric label="страниц" value={activeBook.currentPage} />
-              <InsightMetric label="читаю" value={readingCount} />
-              <InsightMetric label="финишей" value={finishedCount} />
-            </div>
-          </>
-        ) : null}
-
-        {tab === "history" ? (
-          <>
-            <h3 className="text-2xl font-black leading-tight">История</h3>
-            <div className="grid gap-2 text-sm text-white/76">
-              <p className="border-b border-white/15 pb-2">
-                Последний прогресс: {activeBook.currentPage} стр.
-              </p>
-              <p className="border-b border-white/15 pb-2">
-                Статус: {statusLabel(activeBook.status)}
-              </p>
-              <p>Всего на полке: {pagesTotal} стр.</p>
-            </div>
-          </>
-        ) : null}
-
-        {tab === "finish" ? (
-          <>
-            <h3 className="text-2xl font-black leading-tight">Финиш</h3>
-            <p className="text-sm leading-6 text-white/76">
-              {activeBook.status === "finished"
-                ? "Книга прочитана. Можно добавить оценку и теги в карточке."
-                : `Осталось ${remaining} стр. до завершения.`}
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {activeBook.rating ? (
-                <span className="rounded-full bg-white/12 px-3 py-1 text-xs font-black">
-                  Оценка {activeBook.rating}
-                </span>
-              ) : null}
-              {activeBook.tags.slice(0, 3).map((tag) => (
-                <span
-                  key={tag}
-                  className="rounded-full bg-white/12 px-3 py-1 text-xs font-black"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-          </>
-        ) : null}
-      </div>
-    </section>
-  );
-}
-
 function Metric({ label, value }: { label: string; value: number }) {
   return (
     <div className="min-h-[60px] rounded-[16px] border border-white/55 p-3 shadow-[0_8px_18px_rgba(87,66,45,0.06)]">
@@ -528,24 +357,6 @@ function Metric({ label, value }: { label: string; value: number }) {
       <p className="mt-1 text-xs font-bold text-secondary">{label}</p>
     </div>
   );
-}
-
-function InsightMetric({ label, value }: { label: string; value: number }) {
-  return (
-    <div className="rounded-[16px] bg-white/10 p-3">
-      <strong className="block text-2xl leading-none">{value}</strong>
-      <span className="text-xs font-bold text-white/70">{label}</span>
-    </div>
-  );
-}
-
-function statusLabel(status: Book["status"]) {
-  return {
-    reading: "читаю",
-    want_to_read: "планирую",
-    finished: "прочитано",
-    paused: "пауза",
-  }[status];
 }
 
 function HomeSkeleton() {

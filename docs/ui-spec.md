@@ -176,7 +176,7 @@ Required modules:
 - Current streak
 - Continue shelf with other active books
 - Reader summary with local reading stats
-- Insight widget with `Сегодня`, `Неделя`, `История`, and `Финиш` tabs
+- Insight widget carousel with `Сегодня`, `Неделя`, `История`, and `Финиш` slides
 
 Active book hero:
 
@@ -195,14 +195,15 @@ Progress presentation:
 
 Right-side insight widget:
 
-- Use manual tabs or segmented pills: `Сегодня`, `Неделя`, `История`, `Финиш`.
-- Do not auto-rotate.
+- Use an auto-rotating carousel with slides: `Сегодня`, `Неделя`, `История`, `Финиш`.
+- Rotate every 20 seconds.
 - Default to `Сегодня`.
+- Show one dot per slide at the bottom of the widget and highlight the active dot.
 - `Сегодня`: prompt to update the active book, with `+10 страниц` and `Обновить`.
 - `Неделя`: show pages read, current streak, and finished count.
 - `История`: show recent progress entries and status changes. This uses `ProgressEntry` and `StatusHistoryEntry`; it is not a notes feature.
 - `Финиш`: show remaining pages for unfinished books, or rating, tags, finish date, and status history for finished books.
-- Keep the container height stable across tabs on desktop.
+- Keep the container height stable across slides on desktop.
 
 Empty state:
 
